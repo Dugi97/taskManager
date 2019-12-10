@@ -20,6 +20,16 @@ class User implements UserInterface
     private $id;
 
     /**
+     * @ORM\Column(type="string", length=30)
+     */
+    private $firstName;
+
+    /**
+     * @ORM\Column(type="string", length=30)
+     */
+    private $lastName;
+
+    /**
      * @ORM\Column(type="string", length=180, unique=true)
      */
     private $email;
@@ -34,6 +44,26 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      */
     private $password;
+
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $profilePicture;
+
+    /**
+     * @ORM\Column(type="date", length=11)
+     */
+    private $dateOfBirth;
+
+    /**
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
+    private $countryAndCity;
+
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    private $additionalInformations;
 
     public function getId(): ?int
     {
@@ -69,7 +99,7 @@ class User implements UserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_ADMIN';
+        $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
     }
@@ -111,5 +141,101 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * @param mixed $firstName
+     */
+    public function setFirstName($firstName): void
+    {
+        $this->firstName = $firstName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * @param mixed $lastName
+     */
+    public function setLastName($lastName): void
+    {
+        $this->lastName = $lastName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProfilePicture()
+    {
+        return $this->profilePicture;
+    }
+
+    /**
+     * @param mixed $profilePicture
+     */
+    public function setProfilePicture($profilePicture): void
+    {
+        $this->profilePicture = $profilePicture;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDateOfBirth()
+    {
+        return $this->dateOfBirth;
+    }
+
+    /**
+     * @param mixed $dateOfBirth
+     */
+    public function setDateOfBirth($dateOfBirth): void
+    {
+        $this->dateOfBirth = $dateOfBirth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCountryAndCity()
+    {
+        return $this->countryAndCity;
+    }
+
+    /**
+     * @param mixed $countryAndCity
+     */
+    public function setCountryAndCity($countryAndCity): void
+    {
+        $this->countryAndCity = $countryAndCity;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAdditionalInformations()
+    {
+        return $this->additionalInformations;
+    }
+
+    /**
+     * @param mixed $additionalInformations
+     */
+    public function setAdditionalInformations($additionalInformations): void
+    {
+        $this->additionalInformations = $additionalInformations;
     }
 }

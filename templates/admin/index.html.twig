@@ -61,9 +61,7 @@
                 {{ 'home' }}
             </div>
             <div id="section2" class="tab-pane fade">
-                {{ render(controller(
-                    'App\\Controller\\UserController::index'
-                )) }}
+                {{ render(controller('App\\Controller\\UserController::index')) }}
             </div>
         </div>
     </div>

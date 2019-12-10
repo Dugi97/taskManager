@@ -6,8 +6,19 @@
     <h1>Register</h1>
 
     {{ form_start(registrationForm) }}
+        {{ form_row(registrationForm.firstName) }}
+        {{ form_row(registrationForm.lastName) }}
         {{ form_row(registrationForm.email) }}
         {{ form_row(registrationForm.plainPassword) }}
+        <label for="">Re-type password</label>
+        <input type="password">
+        {{ form_row(registrationForm.dateOfBirth) }}
+        {{ form_row(registrationForm.countryAndCity) }}
+        {{ form_row(registrationForm.profilePicture) }}
+
+
+
+
         {{ form_row(registrationForm.agreeTerms) }}
 
         <button class="btn">Register</button>
