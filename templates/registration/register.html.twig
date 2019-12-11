@@ -3,24 +3,20 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
+    <div class="container-fluid registration-page">
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-12"></div>
+            <div class="col-lg-1 col-md-1 col-sm-12"></div>
+            <div class="col-lg-2 col-md-2 col-sm-12 registration-form">
+                <h1>Register</h1>
+                {{ form_start(registrationForm) }}
+                {{ form_end(registrationForm) }}
+                <a href="{{ path('app_login') }}">Log in!</a>
+            </div>
+            <div class="col-lg-1 col-md-1 col-sm-12"></div>
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.firstName) }}
-        {{ form_row(registrationForm.lastName) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword) }}
-        <label for="">Re-type password</label>
-        <input type="password">
-        {{ form_row(registrationForm.dateOfBirth) }}
-        {{ form_row(registrationForm.countryAndCity) }}
-        {{ form_row(registrationForm.profilePicture) }}
-
-
-
-
-        {{ form_row(registrationForm.agreeTerms) }}
-
-        <button class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+            <div class="col-lg-4 col-md-4 col-sm-12"></div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

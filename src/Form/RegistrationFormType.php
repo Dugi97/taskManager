@@ -8,8 +8,11 @@ use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
@@ -21,23 +24,35 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email')
-            ->add('firstName')
-            ->add('lastName')
-            ->add('countryAndCity', CountryType::class)
-            ->add('dateOfBirth', BirthdayType::class)
-            ->add('profilePicture', FileType::class)
-            ->add('agreeTerms', CheckboxType::class, [
-                'mapped' => false,
-                'constraints' => [
-                    new IsTrue([
-                        'message' => 'You should agree to our terms.',
-                    ]),
-                ],
+            ->add('email', EmailType::class, [
+                'label' => false,
+                'attr' => [
+                    'placeholder' => 'Email',
+                    'class' => 'registration-form-fields form-control',
+                ]
+            ])
+            ->add('firstName', TextType::class, [
+                'label' => false,
+                'attr' => [
+                    'placeholder' => 'First name',
+                    'class' => 'registration-form-fields form-control'
+                ]
+            ])
+            ->add('lastName', TextType::class, [
+                'label' => false,
+                'attr' => [
+                    'placeholder' => 'Last name',
+                    'class' => 'registration-form-fields form-control'
+                ]
             ])
             ->add('plainPassword', PasswordType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
+                'label' => false,
+                'attr' => [
+                    'placeholder' => 'Password',
+                    'class' => 'registration-form-fields form-control'
+                ],
                 'mapped' => false,
                 'constraints' => [
                     new NotBlank([
@@ -50,6 +65,40 @@ class RegistrationFormType extends AbstractType
                         'max' => 4096,
                     ]),
                 ],
+            ])
+            ->add('countryAndCity', CountryType::class, [
+                'label' => false,
+                'attr' => [
+                    'placeholder' => 'Country',
+                    'class' => 'registration-form-fields form-control'
+                ]
+            ])
+            ->add('dateOfBirth', BirthdayType::class, [
+                'label' => 'Birthday',
+                'placeholder' => ['year' => 'Year', 'month' => 'Month', 'day' => 'Day'],
+                'attr' => [
+                    'class' => 'registration-form-fields date-form-control'
+                ]
+            ])
+//            ->add('profilePicture', FileType::class, [
+//                'label' => false,
+//                'attr' => [
+//                    'placeholder' => 'Chose profile picture',
+//                    'accept' => 'image/png, image/jpeg',
+//                    'class' => ''
+//                ]
+//            ])
+//            ->add('agreeTerms', CheckboxType::class, [
+//                'mapped' => false,
+//                'constraints' => [
+//                    new IsTrue([
+//                        'message' => 'You should agree to our terms.',
+//                    ]),
+//                ],
+//                'attr' => ['class' => 'registration-form-fields']
+//            ])
+            ->add('Register', SubmitType::class,[
+                'attr' => ['class' => 'btn btn-danger']
             ])
         ;
     }
