@@ -1,23 +1,48 @@
 body {
-    background-color: lightgray;
+    background-image: url("http://starkovtattoo.spb.ru/images/100/DSC100163876.jpg");
 }
 footer {
     background-color: #555;
     color: white;
     padding: 15px;
 }
+.registration-page {
+}
 .registration-form {
-    margin-top: 5%;
+    margin-top: 8%;
     border-radius: 5%;
+    border: 2px solid #696b69;
     text-align: center;
-    height: 450px;
+    height: 570px;
+    width: 400px;
+    background-color: rgba(130, 130, 130, 0.5);
+}
+.registration-form li{
+    list-style-type: none;
 }
 .registration-form h1 {
     text-transform: uppercase;
-    color: yellow;
-    /*color: white;*/
-    text-shadow: 1px 1px 2px black, 0 0 25px black, 0 0 5px darkblue;
-
+    color: white;
+    text-shadow: 1px 1px 2px black, 0 0 25px black, 0 0 3px darkblue;
+    padding: 10%;
+}
+.registration-form a {
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+}
+.registration-form label {
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+}
+.registration-form button {
+    color: white;
+    background-color: black;
+}
+.registration-form button:hover {
+    color: black;
+    background-color: white;
 }
 .date-form-control select{
     width: 33%;

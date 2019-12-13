@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -36,6 +37,11 @@ class RegistrationFormType extends AbstractType
                 'attr' => [
                     'placeholder' => 'First name',
                     'class' => 'registration-form-fields form-control'
+                ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please enter your first name',
+                    ]),
                 ]
             ])
             ->add('lastName', TextType::class, [
@@ -43,6 +49,11 @@ class RegistrationFormType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Last name',
                     'class' => 'registration-form-fields form-control'
+                ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please enter your last name',
+                    ]),
                 ]
             ])
             ->add('plainPassword', PasswordType::class, [
@@ -97,8 +108,8 @@ class RegistrationFormType extends AbstractType
 //                ],
 //                'attr' => ['class' => 'registration-form-fields']
 //            ])
-            ->add('Register', SubmitType::class,[
-                'attr' => ['class' => 'btn btn-danger']
+            ->add('Register', ButtonType::class,[
+                'attr' => ['class' => 'btn btn-outline-dark btn-lg']
             ])
         ;
     }
@@ -107,6 +118,7 @@ class RegistrationFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'attr' => ['novalidate' => true]
         ]);
     }
 }
