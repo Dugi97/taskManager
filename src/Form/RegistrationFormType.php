@@ -30,7 +30,12 @@ class RegistrationFormType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Email',
                     'class' => 'registration-form-fields form-control',
-                ]
+                ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please enter your email',
+                ]),
+    ]
             ])
             ->add('firstName', TextType::class, [
                 'label' => false,
@@ -108,8 +113,8 @@ class RegistrationFormType extends AbstractType
 //                ],
 //                'attr' => ['class' => 'registration-form-fields']
 //            ])
-            ->add('Register', ButtonType::class,[
-                'attr' => ['class' => 'btn btn-outline-dark btn-lg']
+            ->add('Register', SubmitType::class,[
+                'attr' => ['class' => 'btn btn-outline-dark btn-lg mb-2']
             ])
         ;
     }

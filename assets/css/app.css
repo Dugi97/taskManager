@@ -6,25 +6,46 @@ footer {
     color: white;
     padding: 15px;
 }
+/* Registration form  */
 .registration-page {
 }
 .registration-form {
-    margin-top: 8%;
+    margin-top: 6%;
     border-radius: 5%;
     border: 2px solid #696b69;
     text-align: center;
-    height: 570px;
+    height: auto;
     width: 400px;
     background-color: rgba(130, 130, 130, 0.5);
 }
+.registration-form input{
+    margin: 0 0 15px;
+}
+.registration-form select{
+    margin: 0 0 15px;
+}
+.registration-form ul{
+    padding: 0;
+    width: 100%;
+}
 .registration-form li{
+    font-size: 16px;
     list-style-type: none;
+    color: white;
+    background-color: rgba(226, 106, 106, 0.5);
+    border: 1px solid red;
+    padding: 1px;
 }
 .registration-form h1 {
     text-transform: uppercase;
     color: white;
     text-shadow: 1px 1px 2px black, 0 0 25px black, 0 0 3px darkblue;
-    padding: 10%;
+    padding: 7%;
+}
+.registration-form h3 {
+    color: white;
+    text-shadow: 1px 1px 2px black, 0 0 25px black, 0 0 3px darkblue;
+    /*padding: 10%;*/
 }
 .registration-form a {
     color: white;
@@ -44,10 +65,18 @@ footer {
     color: black;
     background-color: white;
 }
+.registration-form-fields {
+    margin: 5px 5px 20px;
+    width: 100%;
+}
+.date-form-control {
+    margin: 0;
+}
 .date-form-control select{
-    width: 33%;
+    width: 32%;
     /*display: block;*/
     padding: 3px 5px;
+    margin: 2px 2px 7%;
     font-size: 14px;
     line-height: 1.42857143;
     color: #555555;
@@ -56,10 +85,8 @@ footer {
     border: 1px solid #ccc;
     border-radius: 4px;
 }
-.registration-form-fields {
-    margin: 5px 5px 20px;
-    width: 100%;
-}
+
+
 .login-form input {
     width: 50%;
 }
