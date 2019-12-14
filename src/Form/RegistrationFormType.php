@@ -29,7 +29,7 @@ class RegistrationFormType extends AbstractType
                 'label' => false,
                 'attr' => [
                     'placeholder' => 'Email',
-                    'class' => 'registration-form-fields form-control',
+                    'class' => 'reg-log-form-fields form-control',
                 ],
                 'constraints' => [
                     new NotBlank([
@@ -41,7 +41,7 @@ class RegistrationFormType extends AbstractType
                 'label' => false,
                 'attr' => [
                     'placeholder' => 'First name',
-                    'class' => 'registration-form-fields form-control'
+                    'class' => 'reg-log-form-fields form-control'
                 ],
                 'constraints' => [
                     new NotBlank([
@@ -53,7 +53,7 @@ class RegistrationFormType extends AbstractType
                 'label' => false,
                 'attr' => [
                     'placeholder' => 'Last name',
-                    'class' => 'registration-form-fields form-control'
+                    'class' => 'reg-log-form-fields form-control'
                 ],
                 'constraints' => [
                     new NotBlank([
@@ -67,7 +67,7 @@ class RegistrationFormType extends AbstractType
                 'label' => false,
                 'attr' => [
                     'placeholder' => 'Password',
-                    'class' => 'registration-form-fields form-control'
+                    'class' => 'reg-log-form-fields form-control'
                 ],
                 'mapped' => false,
                 'constraints' => [
@@ -86,14 +86,14 @@ class RegistrationFormType extends AbstractType
                 'label' => false,
                 'attr' => [
                     'placeholder' => 'Country',
-                    'class' => 'registration-form-fields form-control'
+                    'class' => 'reg-log-form-fields form-control'
                 ]
             ])
             ->add('dateOfBirth', BirthdayType::class, [
                 'label' => 'Birthday',
                 'placeholder' => ['year' => 'Year', 'month' => 'Month', 'day' => 'Day'],
                 'attr' => [
-                    'class' => 'registration-form-fields date-form-control'
+                    'class' => 'reg-log-form-fields date-form-control'
                 ]
             ])
 //            ->add('profilePicture', FileType::class, [
@@ -111,7 +111,7 @@ class RegistrationFormType extends AbstractType
 //                        'message' => 'You should agree to our terms.',
 //                    ]),
 //                ],
-//                'attr' => ['class' => 'registration-form-fields']
+//                'attr' => ['class' => 'reg-log-form-fields']
 //            ])
             ->add('Register', SubmitType::class,[
                 'attr' => ['class' => 'btn btn-outline-dark btn-lg mb-2']
