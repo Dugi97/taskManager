@@ -22,19 +22,19 @@ class User implements UserInterface
     private $id;
 
     /**
-     * @Assert\NotBlank
+     * @Assert\NotBlank(message="Please enter your first name")
      * @ORM\Column(type="string", length=30, nullable=true)
      */
     private $firstName;
 
     /**
-     * @Assert\NotBlank
+     * @Assert\NotBlank(message="Please enter your last name")
      * @ORM\Column(type="string", length=30, nullable=true)
      */
     private $lastName;
 
     /**
-     * @Assert\NotBlank
+     * @Assert\NotBlank(message="Please enter your email")
      * @ORM\Column(type="string", length=180, unique=true)
      */
     private $email;
@@ -45,7 +45,7 @@ class User implements UserInterface
     private $roles = [];
 
     /**
-     * @Assert\NotBlank
+     * @Assert\NotBlank(message="Please enter a password")
      * @var string The hashed password
      * @ORM\Column(type="string")
      */

@@ -31,7 +31,6 @@ class RegistrationController extends AbstractController
         $email = $form->get('email')->getData();
         $fullName = $form->get('firstName')->getData().' '.$form->get('lastName')->getData();
         $randomCode = substr(md5(mt_rand()), 0, 6);
-
         if ($form->isSubmitted() && $form->isValid() ) {
             if ($this->confirmationMail($email, $fullName, $randomCode)) {
                 // encode the plain password

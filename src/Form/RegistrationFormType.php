@@ -31,11 +31,6 @@ class RegistrationFormType extends AbstractType
                     'placeholder' => 'Email',
                     'class' => 'reg-log-form-fields form-control',
                 ],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Please enter your email',
-                ]),
-    ]
             ])
             ->add('firstName', TextType::class, [
                 'label' => false,
@@ -43,11 +38,6 @@ class RegistrationFormType extends AbstractType
                     'placeholder' => 'First name',
                     'class' => 'reg-log-form-fields form-control'
                 ],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Please enter your first name',
-                    ]),
-                ]
             ])
             ->add('lastName', TextType::class, [
                 'label' => false,
@@ -55,11 +45,6 @@ class RegistrationFormType extends AbstractType
                     'placeholder' => 'Last name',
                     'class' => 'reg-log-form-fields form-control'
                 ],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Please enter your last name',
-                    ]),
-                ]
             ])
             ->add('plainPassword', PasswordType::class, [
                 // instead of being set onto the object directly,
@@ -71,9 +56,6 @@ class RegistrationFormType extends AbstractType
                 ],
                 'mapped' => false,
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'Please enter a password',
-                    ]),
                     new Length([
                         'min' => 6,
                         'minMessage' => 'Your password should be at least {{ limit }} characters',
