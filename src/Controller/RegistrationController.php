@@ -46,4 +46,28 @@ class RegistrationController extends AbstractController
             'registrationForm' => $form->createView(),
         ]);
     }
+
+//    /**
+//     * @Route("/register/confirm", name="confirm_registration")
+//     * @param $sendTo
+//     * @return bool
+//     */
+//    public function confirmationMail($sendTo)
+//    {
+//        $transport = (new Swift_SmtpTransport('lazardugalic1@gmail.com', 25))
+//            ->setUsername('Lazar Dugalic')
+//            ->setPassword('L@zardugalic1');
+//        $mailer = new Swift_Mailer($transport);
+//
+//        // Create a message
+//        $message = (new Swift_Message('test'))
+//            ->setFrom('lazardugalic1@gmail.com')
+//            ->setTo($sendTo)
+//            ->setBody($this->renderView('registration/confirmation_email.html.twig', [
+//                'recipient' => $sendTo
+//            ]), 'text/html');
+//        $mailer->send($message);
+//
+//        return true;
+//    }
 }
