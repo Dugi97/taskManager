@@ -23,13 +23,13 @@ class User implements UserInterface
 
     /**
      * @Assert\NotBlank(message="Please enter your first name")
-     * @ORM\Column(type="string", length=30, nullable=true)
+     * @ORM\Column(type="string", length=30)
      */
     private $firstName;
 
     /**
      * @Assert\NotBlank(message="Please enter your last name")
-     * @ORM\Column(type="string", length=30, nullable=true)
+     * @ORM\Column(type="string", length=30)
      */
     private $lastName;
 
@@ -46,6 +46,11 @@ class User implements UserInterface
 
     /**
      * @Assert\NotBlank(message="Please enter a password")
+     * @Assert\Length(
+     *      min = 6,
+     *      max = 50,
+     *      minMessage = "Your password should be at least {{ limit }} characters",
+     *      maxMessage = "Your password cannot be longer than {{ limit }} characters")
      * @var string The hashed password
      * @ORM\Column(type="string")
      */
@@ -71,6 +76,11 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=100, nullable=true)
      */
     private $additionalInformations;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $verified;
 
     public function getId(): ?int
     {
@@ -244,5 +254,21 @@ class User implements UserInterface
     public function setAdditionalInformations($additionalInformations): void
     {
         $this->additionalInformations = $additionalInformations;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getVerified()
+    {
+        return $this->verified;
+    }
+
+    /**
+     * @param mixed $verified
+     */
+    public function setVerified($verified): void
+    {
+        $this->verified = $verified;
     }
 }

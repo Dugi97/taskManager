@@ -55,14 +55,6 @@ class RegistrationFormType extends AbstractType
                     'class' => 'reg-log-form-fields form-control'
                 ],
                 'mapped' => false,
-                'constraints' => [
-                    new Length([
-                        'min' => 6,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
-                        // max length allowed by Symfony for security reasons
-                        'max' => 4096,
-                    ]),
-                ],
             ])
             ->add('countryAndCity', CountryType::class, [
                 'label' => false,

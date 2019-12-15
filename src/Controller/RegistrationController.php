@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Bridge\Google\Transport\GmailSmtpTransport;
@@ -28,11 +29,13 @@ class RegistrationController extends AbstractController
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
+
         $email = $form->get('email')->getData();
         $fullName = $form->get('firstName')->getData().' '.$form->get('lastName')->getData();
-        $randomCode = substr(md5(mt_rand()), 0, 6);
-        if ($form->isSubmitted() && $form->isValid() ) {
-            if ($this->confirmationMail($email, $fullName, $randomCode)) {
+        $randomCode = substr(md5(mt_rand()), 0, 10);
+
+        if ($form->isSubmitted()) {
+            if ($this->sendMail($email, $fullName, $randomCode)) {
                 // encode the plain password
                 $user->setPassword(
                     $passwordEncoder->encodePassword(
@@ -40,20 +43,49 @@ class RegistrationController extends AbstractController
                         $form->get('plainPassword')->getData()
                     ));
                 $user->setRoles(['ROLE_USER']);
+                $user->setVerified(false);
 
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($user);
                 $entityManager->flush();
 
                 // do anything else you need here, like send an email
-
-                return $this->redirectToRoute('app_login');
+                return $this->redirectToRoute('verification_form');
             }
         }
+        // Verification
+        $postRequestData = $_POST;
+        $this->registerConfirmation($postRequestData, $randomCode, $user->getId());
 
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/register/verify", name="verify_registration")
+     * @param $postRequestData
+     * @param $randomCode
+     * @param $userId
+     * @return bool|RedirectResponse|Response
+     */
+    public function registerConfirmation($postRequestData, $randomCode, $userId)
+    {
+        if (isset($postRequestData['verify_code_input']) ) {
+           if ($postRequestData['verify_code_input'] == $randomCode) {
+               $entityManager = $this->getDoctrine()->getManager();
+               $user = $entityManager->getRepository(User::class)->find($userId);
+               $user->setVerification(true);
+               $entityManager->flush();
+
+               return $this->redirectToRoute('app_login');
+           } else {
+
+               return $this->redirectToRoute('verification_form');
+           }
+        }
+
+        return false;
     }
 
     /**
@@ -64,7 +96,7 @@ class RegistrationController extends AbstractController
      * @return bool
      * @throws TransportExceptionInterface
      */
-    public function confirmationMail($sendTo, $fullName, $randomCode)
+    public function sendMail($sendTo, $fullName, $randomCode)
     {
         $email = (new Email())
             ->from('zola77kv@gmail.com')
@@ -75,12 +107,22 @@ class RegistrationController extends AbstractController
             ->html($this->renderView('registration/confirmation_email.html.twig', [
                 'name' => $fullName,
                 'code' => $randomCode
-            ]));
+            ]
+        ));
 
         $transport = new GmailSmtpTransport('zola77kv@gmail.com', 'monamonamona');
         $mailer = new Mailer($transport);
         $mailer->send($email);
 
         return true;
+    }
+
+    /**
+     * @Route("/register/verification/form", name="verification_form")
+     * @return Response
+     */
+    public function verificationForm()
+    {
+        return $this->render('registration/verification_form.html.twig');
     }
 }
