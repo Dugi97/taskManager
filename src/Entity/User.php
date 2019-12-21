@@ -2,8 +2,17 @@
 
 namespace App\Entity;
 
+use App\Service\MailService;
+use App\Service\RegistrationService;
+use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
+use http\Env\Request;
+use Psr\Container\ContainerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\Routing\Router;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -11,6 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
+ * @ORM\HasLifecycleCallbacks()
  */
 class User implements UserInterface
 {
@@ -76,11 +86,6 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=100, nullable=true)
      */
     private $additionalInformations;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $verified;
 
     public function getId(): ?int
     {
@@ -257,18 +262,19 @@ class User implements UserInterface
     }
 
     /**
-     * @return mixed
+     * @ORM\PrePersist
+     * @param LifecycleEventArgs $args
+     * @return void
      */
-    public function getVerified()
+    public function prePersist(LifecycleEventArgs $args)
     {
-        return $this->verified;
-    }
+        $fullName = $_REQUEST['registration_form']['firstName'].' '.$_REQUEST['registration_form']['lastName'];
+        $html = '<h1>Hello </h1>'.$fullName.'<br><p>This is your verification code</p><br>'.$_REQUEST['registration_form']['_token'];
+        $sendMail = MailService::sendMail('zola77kv@gmail.com', $_REQUEST['registration_form']['email'], 'Email verification',$html, 'monamonamona');
 
-    /**
-     * @param mixed $verified
-     */
-    public function setVerified($verified): void
-    {
-        $this->verified = $verified;
+        if ($sendMail) {
+ 
+        }
+
     }
 }

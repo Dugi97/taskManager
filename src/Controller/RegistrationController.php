@@ -30,99 +30,56 @@ class RegistrationController extends AbstractController
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
-        $email = $form->get('email')->getData();
-        $fullName = $form->get('firstName')->getData().' '.$form->get('lastName')->getData();
-        $randomCode = substr(md5(mt_rand()), 0, 10);
 
         if ($form->isSubmitted()) {
-            if ($this->sendMail($email, $fullName, $randomCode)) {
-                // encode the plain password
                 $user->setPassword(
                     $passwordEncoder->encodePassword(
                         $user,
                         $form->get('plainPassword')->getData()
                     ));
                 $user->setRoles(['ROLE_USER']);
-                $user->setVerified(false);
 
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($user);
-                $entityManager->flush();
+//                $entityManager->flush();
 
-                // do anything else you need here, like send an email
-                return $this->redirectToRoute('verification_form');
-            }
+                return $this->render('registration/verification_form.html.twig');
+//            }
         }
-        // Verification
-        $postRequestData = $_POST;
-        $this->registerConfirmation($postRequestData, $randomCode, $user->getId());
 
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
     }
 
-    /**
-     * @Route("/register/verify", name="verify_registration")
-     * @param $postRequestData
-     * @param $randomCode
-     * @param $userId
-     * @return bool|RedirectResponse|Response
-     */
-    public function registerConfirmation($postRequestData, $randomCode, $userId)
-    {
-        if (isset($postRequestData['verify_code_input']) ) {
-           if ($postRequestData['verify_code_input'] == $randomCode) {
-               $entityManager = $this->getDoctrine()->getManager();
-               $user = $entityManager->getRepository(User::class)->find($userId);
-               $user->setVerification(true);
-               $entityManager->flush();
 
-               return $this->redirectToRoute('app_login');
-           } else {
+//    /**
+//     * @Route("/register/confirm", name="confirm_registration")
+//     * @param $sendTo
+//     * @param $fullName
+//     * @param $randomCode
+//     * @return bool
+//     * @throws TransportExceptionInterface
+//     */
+//    public function sendMail($sendTo, $fullName, $randomCode)
+//    {
+//        $email = (new Email())
+//            ->from('zola77kv@gmail.com')
+//            ->to($sendTo)
+//            ->priority(Email::PRIORITY_HIGH)
+//            ->subject('Important Notification')
+//            ->text('Lorem ipsum...')
+//            ->html($this->renderView('registration/confirmation_email.html.twig', [
+//                'name' => $fullName,
+//                'code' => $randomCode
+//            ]
+//        ));
+//
+//        $transport = new GmailSmtpTransport('zola77kv@gmail.com', 'monamonamona');
+//        $mailer = new Mailer($transport);
+//        $mailer->send($email);
+//
+//        return true;
+//    }
 
-               return $this->redirectToRoute('verification_form');
-           }
-        }
-
-        return false;
-    }
-
-    /**
-     * @Route("/register/confirm", name="confirm_registration")
-     * @param $sendTo
-     * @param $fullName
-     * @param $randomCode
-     * @return bool
-     * @throws TransportExceptionInterface
-     */
-    public function sendMail($sendTo, $fullName, $randomCode)
-    {
-        $email = (new Email())
-            ->from('zola77kv@gmail.com')
-            ->to($sendTo)
-            ->priority(Email::PRIORITY_HIGH)
-            ->subject('Important Notification')
-            ->text('Lorem ipsum...')
-            ->html($this->renderView('registration/confirmation_email.html.twig', [
-                'name' => $fullName,
-                'code' => $randomCode
-            ]
-        ));
-
-        $transport = new GmailSmtpTransport('zola77kv@gmail.com', 'monamonamona');
-        $mailer = new Mailer($transport);
-        $mailer->send($email);
-
-        return true;
-    }
-
-    /**
-     * @Route("/register/verification/form", name="verification_form")
-     * @return Response
-     */
-    public function verificationForm()
-    {
-        return $this->render('registration/verification_form.html.twig');
-    }
 }
