@@ -2,17 +2,8 @@
 
 namespace App\Entity;
 
-use App\Service\MailService;
-use App\Service\RegistrationService;
-use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
-use http\Env\Request;
-use Psr\Container\ContainerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\Routing\Router;
-use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -45,7 +36,8 @@ class User implements UserInterface
 
     /**
      * @Assert\NotBlank(message="Please enter your email")
-     * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\Unique()
+     * @ORM\Column(type="string", length=180)
      */
     private $email;
 
@@ -83,9 +75,19 @@ class User implements UserInterface
     private $countryAndCity;
 
     /**
+     * @ORM\Column(type="string")
+     */
+    private $createdAt;
+
+    /**
      * @ORM\Column(type="string", length=100, nullable=true)
      */
     private $additionalInformations;
+
+    /**
+     * @ORM\Column(type="string", length=10)
+     */
+    private $verificationCode;
 
     public function getId(): ?int
     {
@@ -262,19 +264,45 @@ class User implements UserInterface
     }
 
     /**
-     * @ORM\PrePersist
-     * @param LifecycleEventArgs $args
-     * @return void
+     * @return mixed
      */
-    public function prePersist(LifecycleEventArgs $args)
+    public function getCreatedAt()
     {
-        $fullName = $_REQUEST['registration_form']['firstName'].' '.$_REQUEST['registration_form']['lastName'];
-        $html = '<h1>Hello </h1>'.$fullName.'<br><p>This is your verification code</p><br>'.$_REQUEST['registration_form']['_token'];
-        $sendMail = MailService::sendMail('zola77kv@gmail.com', $_REQUEST['registration_form']['email'], 'Email verification',$html, 'monamonamona');
+        return $this->createdAt;
+    }
 
-        if ($sendMail) {
- 
-        }
+    /**
+     * @param mixed $createdAt
+     */
+    public function setCreatedAt($createdAt): void
+    {
+        $this->createdAt = $createdAt;
+    }
 
+    /**
+     * @ORM\PrePersist
+     * @return void
+     * @throws \Exception
+     */
+    public function prePersist()
+    {
+        $dateAndTime = new \DateTime();
+        $this->createdAt = $dateAndTime->format('Y-m-d H:i:s');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getVerificationCode()
+    {
+        return $this->verificationCode;
+    }
+
+    /**
+     * @param mixed $verificationCode
+     */
+    public function setVerificationCode($verificationCode): void
+    {
+        $this->verificationCode = $verificationCode;
     }
 }

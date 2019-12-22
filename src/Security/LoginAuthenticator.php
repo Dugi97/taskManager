@@ -79,7 +79,12 @@ class LoginAuthenticator extends AbstractFormLoginAuthenticator implements Passw
 
     public function checkCredentials($credentials, UserInterface $user)
     {
-        return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
+        /** @var User $user */
+        if ($user->getVerificationCode() == 'verified') {
+            return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
+        } else {
+            throw new CustomUserMessageAuthenticationException('Your account if not verified yet !');
+        }
     }
 
     /**
