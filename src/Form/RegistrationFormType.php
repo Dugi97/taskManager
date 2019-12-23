@@ -26,14 +26,7 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email', HiddenType::class, [
-                'label' => false,
-                'attr' => [
-                    'placeholder' => 'Email',
-                    'class' => 'reg-log-form-fields form-control',
-                ],
-            ])
-            ->add('email', TextType::class, [
+            ->add('email', EmailType::class, [
                 'label' => false,
                 'attr' => [
                     'placeholder' => 'Email',

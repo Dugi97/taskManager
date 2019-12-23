@@ -10,7 +10,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  * @ORM\HasLifecycleCallbacks()
  */
 class User implements UserInterface
@@ -36,7 +35,6 @@ class User implements UserInterface
 
     /**
      * @Assert\NotBlank(message="Please enter your email")
-     * @Assert\Unique()
      * @ORM\Column(type="string", length=180)
      */
     private $email;
@@ -280,17 +278,6 @@ class User implements UserInterface
     }
 
     /**
-     * @ORM\PrePersist
-     * @return void
-     * @throws \Exception
-     */
-    public function prePersist()
-    {
-        $dateAndTime = new \DateTime();
-        $this->createdAt = $dateAndTime->format('Y-m-d H:i:s');
-    }
-
-    /**
      * @return mixed
      */
     public function getVerificationCode()
@@ -304,5 +291,16 @@ class User implements UserInterface
     public function setVerificationCode($verificationCode): void
     {
         $this->verificationCode = $verificationCode;
+    }
+
+    /**
+     * @ORM\PrePersist
+     * @return void
+     * @throws \Exception
+     */
+    public function prePersist()
+    {
+        $dateAndTime = new \DateTime();
+        $this->createdAt = $dateAndTime->format('Y-m-d H:i:s');
     }
 }

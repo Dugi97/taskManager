@@ -37,7 +37,7 @@ class RegistrationController extends AbstractController
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() and $form->isValid()) {
+        if ($form->isSubmitted()) {
             $verificationCode = substr(md5(mt_rand()), 0, 6);
             $registrationService->sendVerificationMail($form, $verificationCode);
             $user->setPassword(
@@ -45,15 +45,16 @@ class RegistrationController extends AbstractController
                     $user,
                     $form->get('plainPassword')->getData()
                 ));
-            $user->setVerificationCode($verificationCode);
             $user->setRoles(['ROLE_USER']);
-
+            $user->setVerificationCode($verificationCode);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
 
             return $this->getVerificationForm($user->getId());
         }
+
+
 
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
