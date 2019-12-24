@@ -2,7 +2,10 @@
 
 namespace App\Entity;
 
+use DateTime;
+use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -10,6 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  * @ORM\HasLifecycleCallbacks()
  */
 class User implements UserInterface
@@ -22,19 +26,17 @@ class User implements UserInterface
     private $id;
 
     /**
-     * @Assert\NotBlank(message="Please enter your first name")
      * @ORM\Column(type="string", length=30)
      */
     private $firstName;
 
     /**
-     * @Assert\NotBlank(message="Please enter your last name")
      * @ORM\Column(type="string", length=30)
      */
     private $lastName;
 
     /**
-     * @ORM\Column(type="string", unique=true, length=180)
+     * @ORM\Column(type="string", length=180)
      */
     private $email;
 
@@ -44,12 +46,6 @@ class User implements UserInterface
     private $roles = [];
 
     /**
-     * @Assert\NotBlank(message="Please enter a password")
-     * @Assert\Length(
-     *      min = 6,
-     *      max = 50,
-     *      minMessage = "Your password should be at least {{ limit }} characters",
-     *      maxMessage = "Your password cannot be longer than {{ limit }} characters")
      * @var string The hashed password
      * @ORM\Column(type="string")
      */
@@ -294,12 +290,12 @@ class User implements UserInterface
 
     /**
      * @ORM\PrePersist
-     * @return void
-     * @throws \Exception
+     * @param LifecycleEventArgs $args
+     * @throws Exception
      */
-    public function prePersist()
+    public function prePersist(LifecycleEventArgs $args): void
     {
-        $dateAndTime = new \DateTime();
-        $this->createdAt = $dateAndTime->format('Y-m-d H:i:s');
+            $dateAndTime = new DateTime();
+            $this->createdAt = $dateAndTime->format('Y-m-d H:i:s');
     }
 }

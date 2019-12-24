@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\User;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
@@ -33,6 +34,11 @@ class RegistrationFormType extends AbstractType
                     'placeholder' => 'Email',
                     'class' => 'reg-log-form-fields form-control',
                 ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please enter your email'
+                    ]),
+                ]
             ])
             ->add('firstName', TextType::class, [
                 'label' => false,
@@ -40,6 +46,11 @@ class RegistrationFormType extends AbstractType
                     'placeholder' => 'First name',
                     'class' => 'reg-log-form-fields form-control'
                 ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please enter your first name'
+                    ])
+                ]
             ])
             ->add('lastName', TextType::class, [
                 'label' => false,
@@ -47,8 +58,13 @@ class RegistrationFormType extends AbstractType
                     'placeholder' => 'Last name',
                     'class' => 'reg-log-form-fields form-control'
                 ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please enter your last name'
+                    ])
+                ]
             ])
-            ->add('plainPassword', PasswordType::class, [
+            ->add('password', PasswordType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
                 'label' => false,
@@ -57,6 +73,17 @@ class RegistrationFormType extends AbstractType
                     'class' => 'reg-log-form-fields form-control'
                 ],
                 'mapped' => false,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please enter your password'
+                    ]),
+                    new Length([
+                        'min' => 6,
+                        'max' => 30,
+                        'minMessage' => 'Required min 6 charachers',
+                        'maxMessage' => 'Required max 30 characters'
+                    ])
+                ]
             ])
             ->add('countryAndCity', CountryType::class, [
                 'label' => false,
@@ -70,6 +97,11 @@ class RegistrationFormType extends AbstractType
                 'placeholder' => ['year' => 'Year', 'month' => 'Month', 'day' => 'Day'],
                 'attr' => [
                     'class' => 'reg-log-form-fields date-form-control'
+                ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Insert your birthday'
+                    ])
                 ]
             ])
 //            ->add('profilePicture', FileType::class, [
