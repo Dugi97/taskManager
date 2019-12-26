@@ -2,21 +2,22 @@
 
 namespace App\Controller;
 
+use App\Entity\Post;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use DateTime;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/user")
- */
+
 class UserController extends AbstractController
 {
     /**
-     * @Route("/", name="user_index", methods={"GET"})
+     * @Route("/user", name="user_index", methods={"GET"})
      * @param UserRepository $userRepository
      * @return Response
      */
@@ -28,9 +29,10 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="user_new", methods={"GET","POST"})
+     * @Route("/user/new", name="user_new", methods={"GET","POST"})
      * @param Request $request
      * @return Response
+     * @throws Exception
      */
     public function new(Request $request): Response
     {
@@ -40,7 +42,7 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
-//            $user->setRoles(['ROLE_USER']);
+            $user->setRoles(['ROLE_USER']);
             $entityManager->persist($user);
             $entityManager->flush();
 
@@ -54,7 +56,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="user_show", methods={"GET"})
+     * @Route("/user/{id}", name="user_show", methods={"GET"})
      * @param User $user
      * @return Response
      */
@@ -66,7 +68,22 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="user_edit", methods={"GET","POST"})
+     * @Route("/{accountAlias}", name="show_my_account", methods={"GET"})
+     * @param User $user
+     * @return Response
+     */
+    public function showMyAccout(User $user): Response
+    {
+        $allMyPosts = $this->getDoctrine()->getRepository(Post::class)->findBy(['user' => $this->getUser()->getId()]);
+
+        return $this->render('user/my_profile.html.twig', [
+            'user' => $user,
+            'allPosts' => $allMyPosts
+        ]);
+    }
+
+    /**
+     * @Route("/user/{id}/edit", name="user_edit", methods={"GET","POST"})
      * @param Request $request
      * @param User $user
      * @return Response
@@ -89,7 +106,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="user_delete", methods={"DELETE"})
+     * @Route("/user/{id}", name="user_delete", methods={"DELETE"})
      * @param Request $request
      * @param User $user
      * @return Response

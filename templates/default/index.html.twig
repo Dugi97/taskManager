@@ -1,7 +1,6 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-  {{ dump() }}
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -28,7 +27,7 @@
         </div>
       </form>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="{{ path('user_show', {id: current_user.id}) }}"><span class="glyphicon glyphicon-user"></span> {{ current_user.firstName }} {{  current_user.lastName }}</a></li>
+        <li><a href="{{ path('show_my_account', {accountAlias: current_user.accountAlias }) }}"><span class="glyphicon glyphicon-user"></span> {{ current_user.fullName }}</a></li>
       </ul>
     </div>
   </div>
@@ -38,7 +37,7 @@
   <div class="row">
     <div class="col-sm-3 well">
       <div class="well">
-        <p>{{ current_user.firstName }} {{  current_user.lastName }}</p>
+        <p>{{ current_user.fullName }}</p>
         <img src="bird.jpg" class="img-circle" height="65" width="65" alt="Avatar">
       </div>
       <div class="well">

@@ -34,7 +34,7 @@ class RegistrationService
      */
     public function sendVerificationMail($request, $verificationCode)
     {
-        $fullName = $request->get('firstName')->getData().' '.$request->get('lastName')->getData();
+        $fullName = $request->get('fullName')->getData();
         $html = $this->twig->render('registration/confirmation_email.html.twig', [
             'name' => $fullName,
             'code' => $verificationCode

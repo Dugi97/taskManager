@@ -40,27 +40,33 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ]
             ])
-            ->add('firstName', TextType::class, [
+            ->add('accountAlias', TextType::class, [
                 'label' => false,
                 'attr' => [
-                    'placeholder' => 'First name',
-                    'class' => 'reg-log-form-fields form-control'
+                    'placeholder' => 'Username',
+                    'class' => 'reg-log-form-fields form-control',
                 ],
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter your first name'
+                        'message' => 'Please enter your email'
+                    ]),
+                    new Length([
+                        'min' => 6,
+                        'max' => 30,
+                        'minMessage' => 'Required min 6 charachers',
+                        'maxMessage' => 'Required max 30 characters'
                     ])
                 ]
             ])
-            ->add('lastName', TextType::class, [
+            ->add('fullName', TextType::class, [
                 'label' => false,
                 'attr' => [
-                    'placeholder' => 'Last name',
+                    'placeholder' => 'Full name',
                     'class' => 'reg-log-form-fields form-control'
                 ],
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter your last name'
+                        'message' => 'Please enter your name'
                     ])
                 ]
             ])
@@ -85,11 +91,16 @@ class RegistrationFormType extends AbstractType
                     ])
                 ]
             ])
-            ->add('countryAndCity', CountryType::class, [
+            ->add('countryAndCity', TextType::class, [
                 'label' => false,
                 'attr' => [
-                    'placeholder' => 'Country',
+                    'placeholder' => 'Country and City, eg. London, UK',
                     'class' => 'reg-log-form-fields form-control'
+                ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Insert your location'
+                    ])
                 ]
             ])
             ->add('dateOfBirth', BirthdayType::class, [

@@ -88,3 +88,37 @@ footer {
     color: white;
     text-shadow: 2px 2px 3px rgba(255, 255, 255, 0.1);
 }
+.container {
+    background-color: white;
+}
+.profileData {
+    width: 220px;
+}
+.profileImage {
+    width: 180px;
+    height: 180px;
+    border: 2px solid red;
+}
+.profileImage:hover {
+    background-color: rgba(176, 176, 176, 0.5)
+}
+.post {
+    display: block;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    width: 80%;
+    position: relative;
+    left: 10%;
+    right: 10%;
+}
+.postText {
+    padding: 5px;
+    border: 1px solid lightslategray;
+}
+.newPost {
+    margin: 30px 10%;
+}
+.newPost button{
+    margin: 5px 0 4px 4px;
+    float: right;
+}

@@ -3,7 +3,8 @@
 namespace App\Entity;
 
 use DateTime;
-use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -14,6 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
+ * @UniqueEntity(fields={"accountAlias"}, message="There is already an account with this username")
  * @ORM\HasLifecycleCallbacks()
  */
 class User implements UserInterface
@@ -28,12 +30,12 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=30)
      */
-    private $firstName;
+    private $accountAlias;
 
     /**
      * @ORM\Column(type="string", length=30)
      */
-    private $lastName;
+    private $fullName;
 
     /**
      * @ORM\Column(type="string", length=180)
@@ -75,12 +77,22 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
      */
-    private $additionalInformations;
+    private $additionalInformation;
 
     /**
      * @ORM\Column(type="string", length=10)
      */
     private $verificationCode;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Post", mappedBy="User")
+     */
+    private $posts;
+
+    public function __construct()
+    {
+        $this->posts = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -163,33 +175,17 @@ class User implements UserInterface
     /**
      * @return mixed
      */
-    public function getFirstName()
+    public function getFullName()
     {
-        return $this->firstName;
+        return $this->fullName;
     }
 
     /**
-     * @param mixed $firstName
+     * @param mixed $fullName
      */
-    public function setFirstName($firstName): void
+    public function setFullName($fullName): void
     {
-        $this->firstName = $firstName;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLastName()
-    {
-        return $this->lastName;
-    }
-
-    /**
-     * @param mixed $lastName
-     */
-    public function setLastName($lastName): void
-    {
-        $this->lastName = $lastName;
+        $this->fullName = $fullName;
     }
 
     /**
@@ -243,17 +239,17 @@ class User implements UserInterface
     /**
      * @return mixed
      */
-    public function getAdditionalInformations()
+    public function getAdditionalInformation()
     {
-        return $this->additionalInformations;
+        return $this->additionalInformation;
     }
 
     /**
-     * @param mixed $additionalInformations
+     * @param mixed $additionalInformation
      */
-    public function setAdditionalInformations($additionalInformations): void
+    public function setAdditionalInformation($additionalInformation): void
     {
-        $this->additionalInformations = $additionalInformations;
+        $this->additionalInformation = $additionalInformation;
     }
 
     /**
@@ -290,12 +286,58 @@ class User implements UserInterface
 
     /**
      * @ORM\PrePersist
-     * @param LifecycleEventArgs $args
      * @throws Exception
      */
-    public function prePersist(LifecycleEventArgs $args): void
+    public function prePersist(): void
     {
-            $dateAndTime = new DateTime();
-            $this->createdAt = $dateAndTime->format('Y-m-d H:i:s');
+        $dateAndTime = new DateTime();
+        $this->createdAt = $dateAndTime->format('Y-m-d');
+    }
+
+    /**
+     * @return Collection|Post[]
+     */
+    public function getPosts(): Collection
+    {
+        return $this->posts;
+    }
+
+    public function addPost(Post $post): self
+    {
+        if (!$this->posts->contains($post)) {
+            $this->posts[] = $post;
+            $post->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePost(Post $post): self
+    {
+        if ($this->posts->contains($post)) {
+            $this->posts->removeElement($post);
+            // set the owning side to null (unless already changed)
+            if ($post->getUser() === $this) {
+                $post->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAccountAlias()
+    {
+        return $this->accountAlias;
+    }
+
+    /**
+     * @param mixed $accountAlias
+     */
+    public function setAccountAlias($accountAlias): void
+    {
+        $this->accountAlias = $accountAlias;
     }
 }
