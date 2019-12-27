@@ -90,7 +90,7 @@ class User implements UserInterface
     private $posts;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Images", mappedBy="PostedBy")
+     * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="PostedBy")
      */
     private $images;
 
@@ -348,14 +348,14 @@ class User implements UserInterface
     }
 
     /**
-     * @return Collection|Images[]
+     * @return Collection|Image[]
      */
     public function getImages(): Collection
     {
         return $this->images;
     }
 
-    public function addImage(Images $image): self
+    public function addImage(Image $image): self
     {
         if (!$this->images->contains($image)) {
             $this->images[] = $image;
@@ -365,7 +365,7 @@ class User implements UserInterface
         return $this;
     }
 
-    public function removeImage(Images $image): self
+    public function removeImage(Image $image): self
     {
         if ($this->images->contains($image)) {
             $this->images->removeElement($image);

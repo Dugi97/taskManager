@@ -13,6 +13,9 @@
                     <h3><b>{{ user.fullName }}</b></h3>
                     <h4>born <b>{{ user.dateOfBirth|date('d. m. Y.') }}</b></h4>
                     <h4>from <b>{{ user.countryAndCity }}</b></h4>
+                    <form action="{{ path('upload_image', {user: user.id}) }}" method="post" enctype="multipart/form-data">
+                        <input type="file" name="files[]" multiple="multiple" onchange="submit()">
+                    </form>
                 </div>
             </div>
             <div class="col-lg-8">
@@ -23,9 +26,6 @@
                         <button type="submit" class="btn btn-primary" value="submit">Publish</button>
                     </form>
                     <a href="#">Add content</a>
-                    <a href="#">Upload picture</a>
-
-
                 </div>
                 <div class="myPosts">
                     {% for post in allPosts|reverse %}

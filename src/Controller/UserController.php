@@ -6,6 +6,7 @@ use App\Entity\Post;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use App\Service\UploadService;
 use DateTime;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -120,5 +121,18 @@ class UserController extends AbstractController
         }
 
         return $this->redirectToRoute('user_index');
+    }
+
+    /**
+     * @Route("/upload/image/{user}", name="upload_image")
+     * @param Request $request
+     * @param UploadService $uploadService
+     * @return Response
+     */
+    public function uploadImage(Request $request, UploadService $uploadService, User $user): Response
+    {
+        $uploadService->uploadFile($request, $user);
+
+        return $this->redirect($request->server->get('HTTP_REFERER'));
     }
 }
