@@ -41,7 +41,7 @@ class UploadService
         $fileObject->setPostedBy($user);
         $fileObject->setImageName($name);
         $fileObject->setUniqueName($uniqueName);
-        $fileObject->setUrl('/uploads/images/'.$uniqueName);
+        $fileObject->setUrl('/build/images/'.$uniqueName);
         $fileObject->setSize($size);
         $fileObject->setUploadedTime(date('d/m/Y H:i:s'));
         $this->entityManager->persist($fileObject);
@@ -62,7 +62,7 @@ class UploadService
             $uniqueName = $getfilename =  str_replace(' ', '_', $this->generateUniqueFileName().'-'.$file->getClientOriginalName());
             $size = $file->getSize();
             $file->move(
-                __DIR__.'/../public/build/images',
+                __DIR__.'/../../public/build/images',
                 $uniqueName
             );
             $this->createAndSaveFile($user, $filename, $uniqueName, $size);

@@ -16,6 +16,13 @@
                     <form action="{{ path('upload_image', {user: user.id}) }}" method="post" enctype="multipart/form-data">
                         <input type="file" name="files[]" multiple="multiple" onchange="submit()">
                     </form>
+                    <div class="row">
+                        {% for image in myImages %}
+                            <div class="col-lg-4" style="border: 2px solid red;">
+                                    <img src="{{ image.url }}" alt="" class="img-responsive">
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
             <div class="col-lg-8">

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Image;
 use App\Entity\Post;
 use App\Entity\User;
 use App\Form\UserType;
@@ -77,9 +78,12 @@ class UserController extends AbstractController
     {
         $allMyPosts = $this->getDoctrine()->getRepository(Post::class)->findBy(['user' => $this->getUser()->getId()]);
 
+        $myImages = $this->getDoctrine()->getRepository(Image::class)->findBy(['postedBy' => $this->getUser()->getId()]);
+
         return $this->render('user/my_profile.html.twig', [
             'user' => $user,
-            'allPosts' => $allMyPosts
+            'allPosts' => $allMyPosts,
+            'myImages' => $myImages
         ]);
     }
 

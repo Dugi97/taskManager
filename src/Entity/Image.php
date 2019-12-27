@@ -19,7 +19,7 @@ class Image
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="images")
      */
-    private $PostedBy;
+    private $postedBy;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -54,12 +54,12 @@ class Image
 
     public function getPostedBy(): ?User
     {
-        return $this->PostedBy;
+        return $this->postedBy;
     }
 
-    public function setPostedBy(?User $PostedBy): self
+    public function setPostedBy(?User $postedBy): self
     {
-        $this->PostedBy = $PostedBy;
+        $this->postedBy = $postedBy;
 
         return $this;
     }
