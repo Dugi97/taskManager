@@ -29,24 +29,35 @@
                 <h1 class="text-center">Posts</h1>
                 <div class="newPost">
                     <form action="{{ path('post_new') }}" method="post">
-                        <textarea class="form-control" placeholder="Type new post..." name="newPost" id="newPost" rows="5"></textarea>
+                        <textarea style="height: 150px" class="form-control" placeholder="Type new post..." name="newPost" id="newPost" rows="200" maxlength="255"></textarea>
                         <button type="submit" class="btn btn-primary" value="submit">Publish</button>
                     </form>
                     <a href="#">Add content</a>
                 </div>
                 <div class="myPosts">
                     {% for post in allPosts|reverse %}
-                        <div class="post">
-                            <span><b>{{ user.fullName }}</b></span> in <span><b>{{ post.dateAndTime }}</b></span>
+                        <div class="postAndComment">
+                            <span><b>{{ user.fullName }}</b></span> in <span><b>{{ post.time }}</b></span>
                             <div class="postText">
                                 <p>{{ post.text }}</p>
                             </div>
+                            {% for comment in post.comments %}
+                                <div class="comments">
+                                    <p><em>Commented by </em><b>{{ comment.user }}</b><em> at </em><b>{{ comment.time }}</b></p>
+                                    <p>{{ comment.text }}</p>
+                                </div>
+                            {% endfor %}
+                            <form action="{{ path('leave_comment', {postId: post.id}) }}" method="post">
+                                <input type="text" class="commentInputField" name="commentInputField">
+                                <button type="submit" class="commentButton float-right">Comment</button>
+                            </form>
                         </div>
                     {% endfor %}
                 </div>
             </div>
         </div>
     </div>
+
     {#    <a href="{{ path('user_index') }}">back to list</a>#}
 
     {#    <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>#}

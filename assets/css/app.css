@@ -6,6 +6,7 @@ footer {
     color: white;
     padding: 15px;
 }
+
 /* Registration form  */
 .reg-log-form {
     margin-top: 6%;
@@ -102,18 +103,35 @@ footer {
 .profileImage:hover {
     background-color: rgba(176, 176, 176, 0.5)
 }
-.post {
-    display: block;
-    margin-top: 8px;
-    margin-bottom: 8px;
+.postAndComment {
     width: 80%;
     position: relative;
     left: 10%;
     right: 10%;
+    margin-bottom: 40px;
+}
+.comments {
+    border: 2px solid grey;
+    font-size: 14px;
+}
+.comments em {
+    color: grey;
+}
+.commentInputField {
+    width: 100%;
+}
+.commentButton {
+    border-top: none;
+    background-color: white;
 }
 .postText {
-    padding: 5px;
-    border: 1px solid lightslategray;
+    display: flex;
+    border: 1px solid black;
+}
+.postText p {
+    overflow: hidden;
+    padding: 10px;
+    width: 100%;
 }
 .newPost {
     margin: 30px 10%;
@@ -122,3 +140,4 @@ footer {
     margin: 5px 0 4px 4px;
     float: right;
 }
+

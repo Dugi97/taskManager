@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Image;
 use App\Entity\Post;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use App\Service\SortDataService;
 use App\Service\UploadService;
 use DateTime;
 use Exception;
@@ -72,17 +74,23 @@ class UserController extends AbstractController
     /**
      * @Route("/{accountAlias}", name="show_my_account", methods={"GET"})
      * @param User $user
+     * @param SortDataService $sortDataService
      * @return Response
      */
-    public function showMyAccout(User $user): Response
+    public function showMyAccout(User $user, SortDataService $sortDataService): Response
     {
         $allMyPosts = $this->getDoctrine()->getRepository(Post::class)->findBy(['user' => $this->getUser()->getId()]);
-
         $myImages = $this->getDoctrine()->getRepository(Image::class)->findBy(['postedBy' => $this->getUser()->getId()]);
+        $sortedPosts = $sortDataService->sortPostData($allMyPosts);
+
+        for ($i = 0; $i < count($sortedPosts); $i++) {
+            $comments = $this->getDoctrine()->getRepository(Comment::class)->findBy(['post' => $sortedPosts[$i]['id']]);
+            $sortedPosts[$i]['comments'] = $sortDataService->sortCommentData($comments);
+        }
 
         return $this->render('user/my_profile.html.twig', [
             'user' => $user,
-            'allPosts' => $allMyPosts,
+            'allPosts' => $sortedPosts,
             'myImages' => $myImages
         ]);
     }
