@@ -68,6 +68,6 @@ class UploadService
             $this->createAndSaveFile($user, $filename, $uniqueName, $size);
         }
 
-        return new JsonResponse(true);
+        return new JsonResponse('./../public/build/images/'.$uniqueName);
     }
 }

@@ -54,7 +54,6 @@ class PostController extends AbstractController
 
     /**
      * @Route("/new/comment/{postId}", name="leave_comment", methods={"GET","POST"})
-     * @param EntityManager $entityManager
      * @param Request $request
      * @param $postId
      * @return RedirectResponse

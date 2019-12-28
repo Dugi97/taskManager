@@ -13,6 +13,7 @@ use App\Service\UploadService;
 use DateTime;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,24 +22,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends AbstractController
 {
     /**
-     * @Route("/user", name="user_index", methods={"GET"})
-     * @param UserRepository $userRepository
-     * @return Response
-     */
-    public function index(UserRepository $userRepository): Response
-    {
-        return $this->render('user/index.html.twig', [
-            'users' => $userRepository->findAll(),
-        ]);
-    }
-
-    /**
      * @Route("/user/new", name="user_new", methods={"GET","POST"})
      * @param Request $request
      * @return Response
      * @throws Exception
      */
-    public function new(Request $request): Response
+    public function newUser(Request $request): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -64,7 +53,7 @@ class UserController extends AbstractController
      * @param User $user
      * @return Response
      */
-    public function show(User $user): Response
+    public function showUser(User $user): Response
     {
         return $this->render('user/show.html.twig', [
             'user' => $user,
@@ -82,69 +71,39 @@ class UserController extends AbstractController
         $allMyPosts = $this->getDoctrine()->getRepository(Post::class)->findBy(['user' => $this->getUser()->getId()]);
         $myImages = $this->getDoctrine()->getRepository(Image::class)->findBy(['postedBy' => $this->getUser()->getId()]);
         $sortedPosts = $sortDataService->sortPostData($allMyPosts);
-
-        for ($i = 0; $i < count($sortedPosts); $i++) {
-            $comments = $this->getDoctrine()->getRepository(Comment::class)->findBy(['post' => $sortedPosts[$i]['id']]);
-            $sortedPosts[$i]['comments'] = $sortDataService->sortCommentData($comments);
-        }
+        $sortedPostsAndComments = $this->getCommentsByPostId($sortDataService, $sortedPosts);
 
         return $this->render('user/my_profile.html.twig', [
             'user' => $user,
-            'allPosts' => $sortedPosts,
+            'allPosts' => $sortedPostsAndComments,
             'myImages' => $myImages
         ]);
     }
 
     /**
-     * @Route("/user/{id}/edit", name="user_edit", methods={"GET","POST"})
-     * @param Request $request
-     * @param User $user
-     * @return Response
+     * @param SortDataService $sortDataService
+     * @param $sortedPosts
+     * @return mixed
      */
-    public function edit(Request $request, User $user): Response
+    public function getCommentsByPostId($sortDataService, $sortedPosts)
     {
-        $form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('user_index');
+        for ($i = 0; $i < count($sortedPosts); $i++) {
+            $allComments = $this->getDoctrine()->getRepository(Comment::class)->findBy(['post' => $sortedPosts[$i]['id']]);
+            $sortedPosts[$i]['comments'] = $sortDataService->sortCommentData($allComments);
         }
 
-        return $this->render('user/edit.html.twig', [
-            'user' => $user,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/user/{id}", name="user_delete", methods={"DELETE"})
-     * @param Request $request
-     * @param User $user
-     * @return Response
-     */
-    public function delete(Request $request, User $user): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($user);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('user_index');
+        return $sortedPosts;
     }
 
     /**
      * @Route("/upload/image/{user}", name="upload_image")
      * @param Request $request
      * @param UploadService $uploadService
+     * @param User $user
      * @return Response
      */
     public function uploadImage(Request $request, UploadService $uploadService, User $user): Response
     {
-        $uploadService->uploadFile($request, $user);
-
-        return $this->redirect($request->server->get('HTTP_REFERER'));
+        return $uploadService->uploadFile($request, $user);
     }
 }
