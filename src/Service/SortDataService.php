@@ -55,4 +55,17 @@ class SortDataService
 
         return $sortResult;
     }
+    public function sortImagesData($images)
+    {
+        $sortResult = [];
+        foreach ($images as $image) {
+            $object['id'] = $image->getId();
+            $object['user'] = $image->getUploadedBy();
+            $object['url'] = $image->getUrl();
+
+            array_push($sortResult, $object);
+        }
+
+        return $sortResult;
+    }
 }

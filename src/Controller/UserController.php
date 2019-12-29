@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Comment;
+use App\Entity\File;
 use App\Entity\Image;
 use App\Entity\Post;
 use App\Entity\User;
@@ -68,14 +69,19 @@ class UserController extends AbstractController
      */
     public function showMyAccout(User $user, SortDataService $sortDataService): Response
     {
-        $allMyPosts = $this->getDoctrine()->getRepository(Post::class)->findBy(['user' => $this->getUser()->getId()]);
-        $myImages = $this->getDoctrine()->getRepository(Image::class)->findBy(['postedBy' => $this->getUser()->getId()]);
+        $allMyPosts = $this->getDoctrine()->getRepository(Post::class)->findBy([
+            'user' => $this->getUser()->getId()
+        ]);
+        $myImages = $this->getDoctrine()->getRepository(File::class)->findBy([
+            'uploaded_by' => $this->getUser()->getId(),
+            'type' => "image"
+        ]);
         $sortedPosts = $sortDataService->sortPostData($allMyPosts);
-        $sortedPostsAndComments = $this->getCommentsByPostId($sortDataService, $sortedPosts);
+        $sortedPostsData = $this->sortPostData($sortDataService, $sortedPosts);
 
         return $this->render('user/my_profile.html.twig', [
             'user' => $user,
-            'allPosts' => $sortedPostsAndComments,
+            'allPosts' => $sortedPostsData,
             'myImages' => $myImages
         ]);
     }
@@ -85,25 +91,16 @@ class UserController extends AbstractController
      * @param $sortedPosts
      * @return mixed
      */
-    public function getCommentsByPostId($sortDataService, $sortedPosts)
+    public function sortPostData($sortDataService, $sortedPosts)
     {
         for ($i = 0; $i < count($sortedPosts); $i++) {
             $allComments = $this->getDoctrine()->getRepository(Comment::class)->findBy(['post' => $sortedPosts[$i]['id']]);
+            $allImages = $this->getDoctrine()->getRepository(File::class)->findBy(['post' => $sortedPosts[$i]['id'] ]);
             $sortedPosts[$i]['comments'] = $sortDataService->sortCommentData($allComments);
+            $sortedPosts[$i]['images'] = $sortDataService->sortImagesData($allImages);
+
         }
 
         return $sortedPosts;
-    }
-
-    /**
-     * @Route("/upload/image/{user}", name="upload_image")
-     * @param Request $request
-     * @param UploadService $uploadService
-     * @param User $user
-     * @return Response
-     */
-    public function uploadImage(Request $request, UploadService $uploadService, User $user): Response
-    {
-        return $uploadService->uploadFile($request, $user);
     }
 }

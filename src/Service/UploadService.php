@@ -3,6 +3,7 @@
 namespace App\Service;
 
 
+use App\Entity\File;
 use App\Entity\Image;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -33,17 +34,20 @@ class UploadService
      * @param $user
      * @param $name
      * @param $uniqueName
+     * @param $type
      * @param $size
      */
-    public function createAndSaveFile($user, $name, $uniqueName, $size): void
+    public function createAndSaveFileObject($user, $name, $uniqueName, $type, $size, $post): void
     {
-        $fileObject = new Image();
-        $fileObject->setPostedBy($user);
-        $fileObject->setImageName($name);
+        $fileObject = new File();
+        $fileObject->setUploadedBy($user);
+        $fileObject->setName($name);
         $fileObject->setUniqueName($uniqueName);
-        $fileObject->setUrl('/build/images/'.$uniqueName);
+        $fileObject->setUrl('/uploads/files/'.$uniqueName);
         $fileObject->setSize($size);
-        $fileObject->setUploadedTime(date('d/m/Y H:i:s'));
+        $fileObject->setTime(date('d/m/Y H:i:s'));
+        $fileObject->setType($type);
+        $fileObject->setPost($post);
         $this->entityManager->persist($fileObject);
         $this->entityManager->flush();
     }
@@ -51,9 +55,11 @@ class UploadService
     /**
      * @param $request
      * @param $user
+     * @param $type
+     * @param $post
      * @return JsonResponse
      */
-    public function uploadFile($request, $user)
+    public function uploadFile($request, $user, $type, $post)
     {
         $files = $request->files->get('files');
         foreach ($files as $file) {
@@ -62,12 +68,12 @@ class UploadService
             $uniqueName = $getfilename =  str_replace(' ', '_', $this->generateUniqueFileName().'-'.$file->getClientOriginalName());
             $size = $file->getSize();
             $file->move(
-                __DIR__.'/../../public/build/images',
+                $this->container->getParameter('files_directory'),
                 $uniqueName
             );
-            $this->createAndSaveFile($user, $filename, $uniqueName, $size);
+            $this->createAndSaveFileObject($user, $filename, $uniqueName, $type, $size, $post);
         }
 
-        return new JsonResponse('./../public/build/images/'.$uniqueName);
+        return new JsonResponse(true);
     }
 }

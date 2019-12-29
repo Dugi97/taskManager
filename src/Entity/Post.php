@@ -47,9 +47,15 @@ class Post
      */
     private $comments;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\File", mappedBy="post")
+     */
+    private $files;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->files = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -137,6 +143,37 @@ class Post
             // set the owning side to null (unless already changed)
             if ($comment->getPost() === $this) {
                 $comment->setPost(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|File[]
+     */
+    public function getFiles(): Collection
+    {
+        return $this->files;
+    }
+
+    public function addFile(File $file): self
+    {
+        if (!$this->files->contains($file)) {
+            $this->files[] = $file;
+            $file->setPost($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFile(File $file): self
+    {
+        if ($this->files->contains($file)) {
+            $this->files->removeElement($file);
+            // set the owning side to null (unless already changed)
+            if ($file->getPost() === $this) {
+                $file->setPost(null);
             }
         }
 

@@ -90,20 +90,20 @@ class User implements UserInterface
     private $posts;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="PostedBy")
-     */
-    private $images;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="user")
      */
     private $comments;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\File", mappedBy="uploaded_by")
+     */
+    private $files;
+
     public function __construct()
     {
         $this->posts = new ArrayCollection();
-        $this->images = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->files = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -354,37 +354,6 @@ class User implements UserInterface
     }
 
     /**
-     * @return Collection|Image[]
-     */
-    public function getImages(): Collection
-    {
-        return $this->images;
-    }
-
-    public function addImage(Image $image): self
-    {
-        if (!$this->images->contains($image)) {
-            $this->images[] = $image;
-            $image->setPostedBy($this);
-        }
-
-        return $this;
-    }
-
-    public function removeImage(Image $image): self
-    {
-        if ($this->images->contains($image)) {
-            $this->images->removeElement($image);
-            // set the owning side to null (unless already changed)
-            if ($image->getPostedBy() === $this) {
-                $image->setPostedBy(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection|Comment[]
      */
     public function getComments(): Collection
@@ -414,4 +383,36 @@ class User implements UserInterface
 
         return $this;
     }
+
+    /**
+     * @return Collection|File[]
+     */
+    public function getFiles(): Collection
+    {
+        return $this->files;
+    }
+
+    public function addFile(File $file): self
+    {
+        if (!$this->files->contains($file)) {
+            $this->files[] = $file;
+            $file->setUploadedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFile(File $file): self
+    {
+        if ($this->files->contains($file)) {
+            $this->files->removeElement($file);
+            // set the owning side to null (unless already changed)
+            if ($file->getUploadedBy() === $this) {
+                $file->setUploadedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
 }
