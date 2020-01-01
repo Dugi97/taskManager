@@ -16,7 +16,7 @@
                     <h4>from <b>{{ user.countryAndCity }}</b></h4>
                     <p class="mt-4 mb-4">{{ user.additionalInformation }}</p>
                     <div class="row sideGallery">
-                        {% for image in myImages %}
+                        {% for image in user.files %}
                             <div class="col-4 mb-4">
                                 <img src="{{ image.url }}" class="img-fluid">
                             </div>
@@ -36,28 +36,41 @@
                 <div class="myPosts">
                     {% for post in allPosts|reverse %}
                         <div class="postAndComment">
-                            <span><b>{{ user.fullName }}</b></span> in <span><b>{{ post.time }}</b></span>
+                            <span><b>{{ post.user.fullname }}</b></span> in <span><b>{{ post.dateAndTime }}</b></span>
                             <div class="postText">
                                 <p>{{ post.text }}</p>
                             </div>
-                            {% if post.images|length == 1 %}
-                                <img src="{{ asset(post.images[0].url) }}" alt="" class="img-fluid">
-                            {% elseif post.images|length > 1 %}
+                            {% if post.files|length == 1 %}
+                                <img src="{{ asset(post.files[0].url) }}" alt="" class="img-fluid">
+                            {% elseif post.files|length > 1 %}
                                 <div id="slider">
                                     <a href="#" class="control_next">></a>
                                     <a href="#" class="control_prev"><</a>
                                     <ul>
-                                        {% for image in post.images %}
+                                        {% for image in post.files %}
                                             <li><img src="{{ asset(image.url) }}" alt="" class="img-fluid"></li>
                                         {% endfor %}
                                     </ul>
                                 </div>
                             {% endif %}
                             {% for comment in post.comments %}
-                                <div class="comments">
-                                    <p><em>Commented by </em><b>{{ comment.user }}</b><em> at </em><b>{{ comment.time }}</b></p>
-                                    <p>{{ comment.text }}</p>
-                                </div>
+                                {% if comment.parent is null %}
+                                    <div class="comments p-3">
+                                        <p><em>Commented by </em><b>{{ comment.user.fullname }}</b><em> at </em><b>{{ comment.time }}</b></p>
+                                        <p>{{ comment.text }}</p>
+                                        {% for replay in comment.children %}
+                                            <div class="replay p-3">
+                                                <img src="{{ replay.user.profilePicture }}" alt="" class="w-25 border-dark">
+                                                <p>{{ replay.text }}</p>
+                                                <a href="#">Replay</a>
+                                            </div>
+                                        {% endfor %}
+                                        <form action="{{ path('leave_comment', {postId: post.id, parentId: comment.id}) }}" method="post">
+                                            <input type="text" class="commentInputField" name="commentInputField" placeholder="Leave a comment...">
+                                            <button type="submit" class="commentButton float-right">Replay</button>
+                                        </form>
+                                    </div>
+                                {% endif %}
                             {% endfor %}
                             <form action="{{ path('leave_comment', {postId: post.id}) }}" method="post">
                                 <input type="text" class="commentInputField" name="commentInputField" placeholder="Leave a comment...">
@@ -69,10 +82,7 @@
             </div>
         </div>
     </div>
-
     {#    <a href="{{ path('user_index') }}">back to list</a>#}
-
     {#    <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>#}
-
     {#    {{ include('user/_delete_form.html.twig') }}#}
 {% endblock %}

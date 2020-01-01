@@ -44,20 +44,27 @@ class PostController extends AbstractController
     }
 
     /**
-     * @Route("/new/comment/{postId}", name="leave_comment", methods={"GET","POST"})
+     * @Route("/new/comment/{postId}/{parentId}", name="leave_comment", methods={"GET","POST"})
      * @param Request $request
      * @param $postId
+     * @param $parentId
      * @return RedirectResponse
      * @throws Exception
      */
-    public function newComment(Request $request, $postId)
+    public function newComment(Request $request, $postId, $parentId = null)
     {
+        $entityManager = $this->getDoctrine()->getManager();
         $comment = new Comment();
-        $comment->setPost($this->getDoctrine()->getManager()->getRepository(Post::class)->find($postId));
+        $comment->setPost($entityManager->getRepository(Post::class)->find($postId));
         $comment->setText($request->get('commentInputField'));
         $comment->setUser($this->getUser());
         $dateAndTime = new DateTime();
         $comment->setTime($dateAndTime->format('Y-m-d H:i:s'));
+        if ($parentId != null) {
+            $parentObject = $entityManager->getRepository(Comment::class)->find($parentId);
+            $comment->setParent($parentObject);
+            $parentObject->addChild($comment);
+        }
         $this->getDoctrine()->getManager()->persist($comment);
         $this->getDoctrine()->getManager()->flush();
 

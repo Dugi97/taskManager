@@ -69,38 +69,10 @@ class UserController extends AbstractController
      */
     public function showMyAccout(User $user, SortDataService $sortDataService): Response
     {
-        $allMyPosts = $this->getDoctrine()->getRepository(Post::class)->findBy([
-            'user' => $this->getUser()->getId()
-        ]);
-        $myImages = $this->getDoctrine()->getRepository(File::class)->findBy([
-            'uploaded_by' => $this->getUser()->getId(),
-            'type' => "image"
-        ]);
-        $sortedPosts = $sortDataService->sortPostData($allMyPosts);
-        $sortedPostsData = $this->sortPostData($sortDataService, $sortedPosts);
-
         return $this->render('user/my_profile.html.twig', [
             'user' => $user,
-            'allPosts' => $sortedPostsData,
-            'myImages' => $myImages
+            'allPosts' => $user->getPosts(),
+            'myImages' => $user->getFiles()
         ]);
-    }
-
-    /**
-     * @param SortDataService $sortDataService
-     * @param $sortedPosts
-     * @return mixed
-     */
-    public function sortPostData($sortDataService, $sortedPosts)
-    {
-        for ($i = 0; $i < count($sortedPosts); $i++) {
-            $allComments = $this->getDoctrine()->getRepository(Comment::class)->findBy(['post' => $sortedPosts[$i]['id']]);
-            $allImages = $this->getDoctrine()->getRepository(File::class)->findBy(['post' => $sortedPosts[$i]['id'] ]);
-            $sortedPosts[$i]['comments'] = $sortDataService->sortCommentData($allComments);
-            $sortedPosts[$i]['images'] = $sortDataService->sortImagesData($allImages);
-
-        }
-
-        return $sortedPosts;
     }
 }
