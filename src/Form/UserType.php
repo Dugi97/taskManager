@@ -45,7 +45,8 @@ class UserType extends AbstractType
             ->add('additionalInformation', TextType::class, [
                 'label' => 'Additional info',
                 'attr' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control',
+                    'novalidate' => 'novalidate'
                 ]
             ])
             ->add('submit', SubmitType::class, [

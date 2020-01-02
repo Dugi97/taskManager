@@ -1,6 +1,6 @@
 body {
     background-image: url("http://starkovtattoo.spb.ru/images/100/DSC100163876.jpg");
-    min-height: 1050px;
+    min-height: 800px;
 }
 footer {
     background-color: #555;
@@ -9,26 +9,32 @@ footer {
 }
 /* Registration form  */
 .reg-log-form {
-    margin-top: 6%;
+    margin-top: 9%;
     border-radius: 5%;
     border: 2px solid #696b69;
     text-align: center;
     height: auto;
-    width: 400px;
+    width: 450px;
     background-color: rgba(130, 130, 130, 0.5);
+    position: relative;
+    left: 40%;
+    right: 40%;
 }
 
-.reg-log-form input{
+.reg-log-form input {
+    margin: 0 0 15px;
+    width: 80%;
+    position: relative;
+    left: 10%;
+    right: 10%;
+}
+
+.reg-log-form select {
     margin: 0 0 15px;
 }
 
-.reg-log-form select{
-    margin: 0 0 15px;
-}
-
-.reg-log-form ul{
+.reg-log-form ul {
     padding: 0;
-    width: 100%;
 }
 
 .reg-log-form li{
@@ -38,6 +44,10 @@ footer {
     background-color: rgba(226, 106, 106, 0.5);
     border: 1px solid red;
     padding: 1px;
+    width: 80%;
+    position: relative;
+    right: 10%;
+    left: 10%;
 }
 
 .reg-log-form h1 {
@@ -88,6 +98,13 @@ footer {
 
 .date-form-control {
     margin: 0;
+}
+
+#registration_form_dateOfBirth {
+    width: 80%;
+    position: relative;
+    right: 10%;
+    left: 10%;
 }
 
 .date-form-control select{
@@ -207,20 +224,6 @@ footer {
 }
 
 /** Image slider */
-@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,600);
-
-html {
-    border-top: 5px solid #fff;
-    background: #58DDAF;
-    color: #2a2a2a;
-}
-
-html, body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Open Sans';
-}
-
 h1 {
     color: #fff;
     text-align: center;
