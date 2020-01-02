@@ -86,3 +86,16 @@ jQuery(document).ready(function ($) {
     });
 
 });
+$('.selectedImage').click(function (e) {
+    e.preventDefault();
+
+    $('.selectedImage').css('border', 'none');
+    $(this).css('border', '3px solid lightblue');
+
+    let imageId = $(this).data('id');
+    $('.selectedImageId').val(imageId);
+});
+// Image gallery
+$(function () {
+    $("#mdb-lightbox-ui").load("mdb-addons/mdb-lightbox-ui.html");
+});

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Comment;
 use App\Entity\File;
 use App\Entity\Post;
+use App\Entity\User;
 use App\Repository\PostRepository;
 use App\Service\UploadService;
 use DateTime;
@@ -15,6 +16,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @Route("/post")
@@ -33,6 +35,8 @@ class PostController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $post = new Post();
         $post->setText($request->get('newPost'));
+
+        /** @var User $this */
         $post->setUser($this->getUser());
         $dateAndTime = new DateTime();
         $post->setDateAndTime($dateAndTime->format('Y-m-d H:i:s'));
@@ -51,17 +55,23 @@ class PostController extends AbstractController
      * @return RedirectResponse
      * @throws Exception
      */
-    public function newComment(Request $request, $postId, $parentId = null)
+    public function newComment(Request $request, $postId, $parentId = null): RedirectResponse
     {
-        $entityManager = $this->getDoctrine()->getManager();
         $comment = new Comment();
+
+        /** @var Post $entityManager */
+        $entityManager = $this->getDoctrine()->getManager();
         $comment->setPost($entityManager->getRepository(Post::class)->find($postId));
         $comment->setText($request->get('commentInputField'));
+
+        /** @var User $this */
         $comment->setUser($this->getUser());
         $dateAndTime = new DateTime();
         $comment->setTime($dateAndTime->format('Y-m-d H:i:s'));
+
         if ($parentId != null) {
             $parentObject = $entityManager->getRepository(Comment::class)->find($parentId);
+            /** @var Comment $parentObject */
             $comment->setParent($parentObject);
             $parentObject->addChild($comment);
         }
@@ -73,6 +83,8 @@ class PostController extends AbstractController
 
     /**
      * @Route("/{id}", name="post_show", methods={"GET"})
+     * @param Post $post
+     * @return Response
      */
     public function show(Post $post): Response
     {

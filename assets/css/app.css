@@ -1,12 +1,12 @@
 body {
     background-image: url("http://starkovtattoo.spb.ru/images/100/DSC100163876.jpg");
+    min-height: 1050px;
 }
 footer {
     background-color: #555;
     color: white;
     padding: 15px;
 }
-
 /* Registration form  */
 .reg-log-form {
     margin-top: 6%;
@@ -17,16 +17,20 @@ footer {
     width: 400px;
     background-color: rgba(130, 130, 130, 0.5);
 }
+
 .reg-log-form input{
     margin: 0 0 15px;
 }
+
 .reg-log-form select{
     margin: 0 0 15px;
 }
+
 .reg-log-form ul{
     padding: 0;
     width: 100%;
 }
+
 .reg-log-form li{
     font-size: 16px;
     list-style-type: none;
@@ -35,42 +39,57 @@ footer {
     border: 1px solid red;
     padding: 1px;
 }
+
 .reg-log-form h1 {
     text-transform: uppercase;
     color: white;
     text-shadow: 1px 1px 2px black, 0 0 25px black, 0 0 3px darkblue;
     padding: 7%;
 }
-.reg-log-form h3, h5 {
+
+.reg-log-form h3 {
     color: white;
     text-shadow: 1px 1px 2px black, 0 0 25px black, 0 0 3px darkblue;
     /*padding: 10%;*/
 }
+
+.reg-log-form h5 {
+    color: white;
+    text-shadow: 1px 1px 2px black, 0 0 25px black, 0 0 3px darkblue;
+    /*padding: 10%;*/
+}
+
 .reg-log-form a {
     color: white;
     font-weight: bold;
     font-size: 16px;
 }
+
 .reg-log-form label {
     color: white;
     font-weight: bold;
     font-size: 18px;
 }
+
 .reg-log-form button {
     color: white;
     background-color: black;
 }
+
 .reg-log-form button:hover {
     color: black;
     background-color: white;
 }
+
 .reg-log-form-fields {
     margin: 5px 5px 20px;
     width: 100%;
 }
+
 .date-form-control {
     margin: 0;
 }
+
 .date-form-control select{
     width: 32%;
     /*display: block;*/
@@ -84,25 +103,63 @@ footer {
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+
 .reg-log-form-question {
     font-size: 16px;
     color: white;
     text-shadow: 2px 2px 3px rgba(255, 255, 255, 0.1);
 }
+
 .container {
-    background-color: white;
+    background-color: aliceblue;
 }
+
+.galleryContainer {
+    background-color: aliceblue;
+}
+
+.viewImageButton {
+    transition: .5s ease;
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    text-align: center;
+    background-color: transparent;
+    border: none;
+    color: black;
+    font-weight: bold;
+}
+
+.galleryItem:hover {
+    opacity: 0.5;
+}
+
+.galleryItem:hover .viewImageButton {
+
+    opacity: 1;
+}
+
 .sideGallery {
     margin-top: 20px;
 }
-.profileImage {
-    width: 180px;
-    height: 180px;
-    border: 2px solid red;
+
+.profileImageHolder {
+    width: 200px;
+    height: auto;
+    margin-bottom: 50px;
+    margin-top: 40px;
+    position: relative;
+    left: 20%;
+    right: 20%;
 }
-.profileImage:hover {
-    background-color: rgba(176, 176, 176, 0.5)
+
+.profileImageHolder:hover {
+    cursor: pointer;
 }
+
 .postAndComment {
     width: 80%;
     position: relative;
@@ -110,35 +167,44 @@ footer {
     right: 10%;
     margin-bottom: 40px;
 }
+
 .comments {
     border: 2px solid grey;
     font-size: 14px;
 }
+
 .comments em {
     color: grey;
 }
+
 .commentInputField {
     width: 100%;
 }
+
 .commentButton {
     border-top: none;
     background-color: white;
 }
+
 .postText {
     display: flex;
 }
+
 .postText p {
     overflow: hidden;
     padding: 10px;
     width: 100%;
 }
+
 .newPost {
     margin: 30px 10%;
 }
+
 .newPost button{
     margin: 5px 0 4px 4px;
     float: right;
 }
+
 /** Image slider */
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,600);
 
@@ -224,4 +290,26 @@ a.control_next {
     margin: 10px auto;
     width: 160px;
     font-size: 18px;
+}
+
+.editProfileForm label {
+    width: 100%;
+    text-align: center;
+    margin: 5px;
+}
+
+#exampleModalLabel {
+    width: 100%;
+    text-align: center;
+}
+
+.editProfileSubmitButton {
+    position: relative;
+    left: 35%;
+    right: 35%;
+    margin: 15px 5px 5px;
+}
+
+.editProfilePictureDialog {
+    width: auto;
 }
