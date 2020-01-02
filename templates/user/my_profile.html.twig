@@ -41,7 +41,7 @@
                         {% for image in user.files %}
                             {% if loop.index < 16 %}
                                 <div class="col-4 mb-4">
-                                    <img src="{{ image.url }}" class="img-fluid">
+                                    <img src="{{ image.url }}" class="img-fluid" style="max-height: 180px">
                                 </div>
                             {% endif %}
                         {% endfor %}
@@ -59,7 +59,7 @@
                 </div>
                 <div class="myPosts">
                     {% for post in allPosts|reverse %}
-                        <div class="postAndComment m-0">
+                        <div class="postAndComment m-0 mb-5">
                             <span><b>{{ post.user.fullname }}</b></span> in <span><b>{{ post.dateAndTime }}</b></span>
                             <div class="postText">
                                 <p>{{ post.text }}</p>
@@ -67,14 +67,27 @@
                             {% if post.files|length == 1 %}
                                 <img src="{{ asset(post.files[0].url) }}" alt="" class="img-fluid">
                             {% elseif post.files|length > 1 %}
-                                <div id="slider">
-                                    <a href="#" class="control_next">></a>
-                                    <a href="#" class="control_prev"><</a>
-                                    <ul>
+                                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                                    <ol class="carousel-indicators">
                                         {% for image in post.files %}
-                                            <li><img src="{{ asset(image.url) }}" alt="" class="img-fluid"></li>
+                                            <li data-target="#carouselExampleIndicators" data-slide-to="{{ loop.index-1 }}" class="{% if loop.index == 1 %} active {% endif %}"></li>
                                         {% endfor %}
-                                    </ul>
+                                    </ol>
+                                    <div class="carousel-inner">
+                                        {% for image in post.files %}
+                                            <div class="carousel-item {% if loop.index == 1 %} active {% endif %}" style="max-height: 380px">
+                                                <img class="d-block w-100" src="{{ asset(image.url) }}" alt="{{ loop.index }} slide">
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
                                 </div>
                             {% endif %}
                             {% for comment in post.comments %}
@@ -84,8 +97,8 @@
                                         <p>{{ comment.text }}</p>
                                         {% for replay in comment.children %}
                                             <div class="replay p-3">
-                                                <img src="{{ replay.user.profilePicture }}" alt="" class="w-25 border-dark">
-                                                <p>{{ replay.text }}</p>
+                                                <img src="{{ replay.user.profilePicture }}" style="width: 40px;border-radius: 50%">
+                                                <p class="float-right">{{ replay.text }}</p>
                                                 <a href="#">Replay</a>
                                             </div>
                                         {% endfor %}
