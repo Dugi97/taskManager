@@ -127,8 +127,15 @@ footer {
     text-shadow: 2px 2px 3px rgba(255, 255, 255, 0.1);
 }
 
-.container {
-    background-color: aliceblue;
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
+.myProfileView {
+    background-color: white;
 }
 
 .galleryContainer {
@@ -164,13 +171,15 @@ footer {
 }
 
 .profileImageHolder {
-    width: 200px;
-    height: auto;
-    margin-bottom: 50px;
-    margin-top: 40px;
+    background-position: center;
+    background-size: cover;
+    width: 80%;
+    height: 250px;
     position: relative;
-    left: 20%;
-    right: 20%;
+    left: 10%;
+    right: 10%;
+    margin-top: 10%;
+    border: 4px solid aliceblue;
 }
 
 .profileImageHolder:hover {

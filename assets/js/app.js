@@ -99,3 +99,20 @@ $('.selectedImage').click(function (e) {
 $(function () {
     $("#mdb-lightbox-ui").load("mdb-addons/mdb-lightbox-ui.html");
 });
+
+$('.uploadProfilePicture').click(function (e) {
+    e.preventDefault();
+    $('#uploadProfilePicture').trigger('click');
+});
+
+$('img, .viewImage').click(function () {
+    let imageData = $(this).data('url');
+
+    $('#viewPictureModal').show(function () {
+        $('.modalImage').attr({
+            src: imageData,
+            alt:'Preview'
+        });
+        $('.imgModalTitle').text('teext');
+    })
+});

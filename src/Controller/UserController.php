@@ -107,7 +107,7 @@ class UserController extends AbstractController
      * @param User $user
      * @return RedirectResponse
      */
-    public function change_photo(Request $request, User $user)
+    public function changePhoto(Request $request, User $user)
     {
         $imageId = $request->get('selectedImageId');
         $entityManager= $this->getDoctrine()->getManager();
@@ -129,5 +129,31 @@ class UserController extends AbstractController
         return $this->render('user/gallery.html.twig', [
             'user' => $user,
         ]);
+    }
+
+    /**
+     * @Route("/upload/profile/picture", name="upload_profile_picture")
+     * @param UploadService $uploadService
+     * @param Request $request
+     * @param User $user
+     * @return RedirectResponse
+     * @throws Exception
+     */
+    public function uploadProfilePicture(UploadService $uploadService, Request $request)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $post = new Post();
+        /** @var User $this */
+        $post->setUser($this->getUser());
+        $dateAndTime = new DateTime();
+        $post->setDateAndTime($dateAndTime->format('Y-m-d H:i:s'));
+        $post->setText('New picture');
+        $fileObject = $uploadService->uploadFile($request, $this->getUser(), $type = 'image', $post);
+        $entityManager->persist($post);
+        $entityManager->flush();
+        $request->request->set('selectedImageId', $fileObject->getId());
+        $this->changePhoto($request, $this->getUser());
+
+        return $this->redirect($request->server->get('HTTP_REFERER'));
     }
 }

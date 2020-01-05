@@ -36,8 +36,9 @@ class UploadService
      * @param $uniqueName
      * @param $type
      * @param $size
+     * @return File
      */
-    public function createAndSaveFileObject($user, $name, $uniqueName, $type, $size, $post): void
+    public function createAndSaveFileObject($user, $name, $uniqueName, $type, $size, $post)
     {
         $fileObject = new File();
         $fileObject->setUploadedBy($user);
@@ -50,6 +51,8 @@ class UploadService
         $fileObject->setPost($post);
         $this->entityManager->persist($fileObject);
         $this->entityManager->flush();
+
+        return $fileObject;
     }
 
     /**
@@ -57,7 +60,7 @@ class UploadService
      * @param $user
      * @param $type
      * @param $post
-     * @return JsonResponse
+     * @return File
      */
     public function uploadFile($request, $user, $type, $post)
     {
@@ -71,9 +74,9 @@ class UploadService
                 $this->container->getParameter('files_directory'),
                 $uniqueName
             );
-            $this->createAndSaveFileObject($user, $filename, $uniqueName, $type, $size, $post);
+            $fileObject = $this->createAndSaveFileObject($user, $filename, $uniqueName, $type, $size, $post);
         }
 
-        return new JsonResponse(true);
+        return $fileObject;
     }
 }

@@ -3,20 +3,23 @@
 {% block title %}User{% endblock %}
 
 {% block body %}
-    <div class="container">
+    <div class="container-fluid myProfileView">
         <input type="hidden" class="userId" value="{{ user.id }}">
         <div class="row">
             <div class="col-4" style="border-right: 2px solid lightgray">
                 <div class="profileData mt-3">
-                    <div class="profileImageHolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-                        <img src="{{ user.profilePicture }}" class="img-fluid profileImage align-items-center">
-                    </div>
+                    <div style="background-image: url({{ user.profilePicture }})" class="profileImageHolder" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ></div>
                     <div class="profileImageDropdown dropdown-menu">
-                        <a class="dropdown-item" href="#">View image</a>
+                        <a class="dropdown-item viewImage" data-url="{{ user.profilePicture }}" href="#" data-toggle="modal" data-target="#viewPictureModal">View image</a>
                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#editProfilePictureModal">Select new image</a>
-                        <a class="dropdown-item" href="#">Upload new image</a>
+                        <a class="dropdown-item uploadProfilePicture" href="#">Upload new image</a>
+                        <form class="d-none" action="{{ path('upload_profile_picture') }}" method="post" enctype="multipart/form-data">
+                            Upload new image
+                            <input id="uploadProfilePicture" accept='image/*' type="file" name="files[]" onchange="submit()" class="uploadButton">
+                        </form>
                     </div>
                     <div data-toggle="modal" data-target="#editProfileDataModal"><img src="https://cdn4.iconfinder.com/data/icons/design-4/100/14-512.png" alt="" style="width: 30px;float: right"></div>
+{#                    Hi, i am {{ user.fullName }}, a zanimanje form {{ user.countryAndCity }}. I'm have #}
                     <table class="table table-bordered table-light basicInfoTable">
                         <tr>
                             <td class="pr-5">Name:</td>
@@ -65,7 +68,7 @@
                                 <p>{{ post.text }}</p>
                             </div>
                             {% if post.files|length == 1 %}
-                                <img src="{{ asset(post.files[0].url) }}" alt="" class="img-fluid">
+                                <img src="{{ asset(post.files[0].url) }}" alt="" class="img-fluid center">
                             {% elseif post.files|length > 1 %}
                                 <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
                                     <ol class="carousel-indicators">
@@ -76,7 +79,7 @@
                                     <div class="carousel-inner">
                                         {% for image in post.files %}
                                             <div class="carousel-item {% if loop.index == 1 %} active {% endif %}" style="max-height: 380px">
-                                                <img class="d-block w-100" src="{{ asset(image.url) }}" alt="{{ loop.index }} slide">
+                                                <img class="d-block w-100 img-fluid" src="{{ asset(image.url) }}" alt="{{ loop.index }} slide">
                                             </div>
                                         {% endfor %}
                                     </div>
@@ -164,6 +167,21 @@
                             {{ form_end(editUserForm) }}
                         </div>
                         <div class="col-2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- View Picture Modal -->
+    <div class="modal fade" id="viewPictureModal" tabindex="-1" role="dialog" aria-labelledby="viewPictureModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h3 class="imgModalTitle"></h3>
+                </div>
+                <div class="modal-body">
+                    <div class="modaleImageHolder">
+                        <img class="modalImage img-fluid">
                     </div>
                 </div>
             </div>
