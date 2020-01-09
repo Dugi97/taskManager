@@ -116,3 +116,24 @@ $('img, .viewImage').click(function () {
         $('.imgModalTitle').text('teext');
     })
 });
+
+$('.chatInputField').keyup(function (e) {
+    e.preventDefault();
+    if (e.which == 13) {
+        let message = $('.chatInputField').val();
+        $.ajax({
+            url: "/send/message",
+            type: "post",
+            data:  {
+                message: message,
+            },
+            success: function(response)
+            {
+            },
+            error: function(e)
+            {
+                console.log('error');
+            }
+        });
+    }
+});

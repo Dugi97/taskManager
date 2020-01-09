@@ -4,4 +4,15 @@
     <div class="container">
         <a href="{{ path('show_my_account', {accountAlias: current_user.accountAlias}) }}">My profile</a>
     </div>
+<div class="container">
+    <div id="wrapper">
+        <div class="chat_wrapper">
+            <div class="mb-3" id="chat" style="width: 503px;height: 500px;background-color: white"></div>
+            <textarea cols="69" rows="3" name="message" class="chatInputField"></textarea>
+        </div>
+    </div>
+</div>
+
+
+
 {% endblock %}

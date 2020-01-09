@@ -156,4 +156,19 @@ class UserController extends AbstractController
 
         return $this->redirect($request->server->get('HTTP_REFERER'));
     }
+
+    /**
+     * @Route("/send/message", name="send_message")
+     * @param Request $request
+     * @return Response
+     */
+    public function sendMessage(Request $request)
+    {
+        $message = $request->get('message');
+
+
+        return $this->render('user/gallery.html.twig', [
+            'user' => $user,
+        ]);
+    }
 }
