@@ -6,6 +6,7 @@
                 <a href="{{ path('show_my_account', {accountAlias: comment.user.accountAlias}) }}">  {{ comment.user.fullname }}</a>
             </div>
             <div>{{ comment.text }}</div>
+            <span class="replay font-weight-bold" data-id="{{ comment.id }}" data-user="{{ comment.user.fullname }}">Replay</span>
             {% for replay in comment.comments %}
                 <div class="replayDiv">
                     <div>
@@ -16,7 +17,6 @@
                     <span class="replay font-weight-bold" data-id="{{ replay.id }}" data-user="{{ replay.user.fullname }}">Replay</span>
                 </div>
             {% endfor %}
-            <span class="replay font-weight-bold" data-id="{{ comment.id }}" data-user="{{ comment.user.fullname }}">Replay</span>
         </div>
     {% endif %}
 {% endfor %}

@@ -398,7 +398,7 @@ a.control_next {
     background-size: cover;
 }
 
-.replayDiv .replayArea {
+.replayDiv, .replayArea  {
     width: 70%;
     min-height: 40px;
     height: auto;

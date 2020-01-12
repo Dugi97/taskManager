@@ -136,6 +136,7 @@ $('.chatInputField').keyup(function (e) {
 $('.replay').click(function (e) {
     e.preventDefault();
     $('.commentId').val($(this).data('id'));
-    $(this).next('.replayArea').removeClass('d-none').addClass('d-inline');
+    $(this).css('color', 'red');
+    $(this).find('.replayArea').removeClass('d-none').addClass('d-inline');
     // $(this:first).find('.replayArea').removeClass('d-none').addClass('d-inline').append($(this).data('user'));
 });
