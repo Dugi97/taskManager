@@ -1,0 +1,29 @@
+{% for comment in post.comments %}
+    {% if comment.parent is null %}
+        <div class="commentDiv">
+            <div>
+                <img src="{{ comment.user.profilePicture }}" alt="" class="smallProfilePicture">
+                <a href="{{ path('show_my_account', {accountAlias: comment.user.accountAlias}) }}">  {{ comment.user.fullname }}</a>
+            </div>
+            <div>{{ comment.text }}</div>
+            {% for replay in comment.comments %}
+                <div class="replayDiv">
+                    <div>
+                        <img src="{{ replay.user.profilePicture }}" alt="" class="smallProfilePicture">
+                        <a href="{{ path('show_my_account', {accountAlias: replay.user.accountAlias}) }}">  {{ replay.user.fullname }}</a>
+                    </div>
+                    <div>{{ replay.text }}</div>
+                    <span class="replay font-weight-bold" data-id="{{ replay.id }}" data-user="{{ replay.user.fullname }}">Replay</span>
+                </div>
+            {% endfor %}
+            <span class="replay font-weight-bold" data-id="{{ comment.id }}" data-user="{{ comment.user.fullname }}">Replay</span>
+        </div>
+    {% endif %}
+{% endfor %}
+<div class="replayArea d-none">
+    <form class="replayForm" action="{{ path('leave_comment', {postId: post.id}) }}" method="post">
+        <input type="text" name="commentId" class="d-none commentId">
+        <textarea name="commentInputField" id="commentInputField" class="commentInputField" placeholder="Leave a comment..."></textarea>
+        <button type="submit" class="commentButton float-right">Replay</button>
+    </form>
+</div>

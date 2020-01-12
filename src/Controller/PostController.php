@@ -40,7 +40,7 @@ class PostController extends AbstractController
         $post->setUser($this->getUser());
         $dateAndTime = new DateTime();
         $post->setDateAndTime($dateAndTime->format('Y-m-d H:i:s'));
-        $uploadService->uploadFile($request, $this->getUser(), $type = 'image', $post);
+        $uploadService->uploadFiles($request, $this->getUser(), $type = 'image', $post);
         $entityManager->persist($post);
         $entityManager->flush();
 
@@ -58,6 +58,7 @@ class PostController extends AbstractController
     public function newComment(Request $request, $postId, $parentId = null): RedirectResponse
     {
         $comment = new Comment();
+        $parentId = $request->get('commentId');
 
         /** @var Post $entityManager */
         $entityManager = $this->getDoctrine()->getManager();

@@ -36,6 +36,7 @@ class UploadService
      * @param $uniqueName
      * @param $type
      * @param $size
+     * @param $post
      * @return File
      */
     public function createAndSaveFileObject($user, $name, $uniqueName, $type, $size, $post)
@@ -60,23 +61,26 @@ class UploadService
      * @param $user
      * @param $type
      * @param $post
-     * @return File
+     * @return File|bool
      */
-    public function uploadFile($request, $user, $type, $post)
+    public function uploadFiles($request, $user, $type, $post)
     {
         $files = $request->files->get('files');
-        foreach ($files as $file) {
-            /** @var UploadedFile $file */
-            $filename = $file->getClientOriginalName();
-            $uniqueName = $getfilename =  str_replace(' ', '_', $this->generateUniqueFileName().'-'.$file->getClientOriginalName());
-            $size = $file->getSize();
-            $file->move(
-                $this->container->getParameter('files_directory'),
-                $uniqueName
-            );
-            $fileObject = $this->createAndSaveFileObject($user, $filename, $uniqueName, $type, $size, $post);
+        if (!empty($files)) {
+            foreach ($files as $file) {
+                /** @var UploadedFile $file */
+                $filename = $file->getClientOriginalName();
+                $uniqueName = str_replace(' ', '_', $this->generateUniqueFileName().'-'.$file->getClientOriginalName());
+                $size = $file->getSize();
+                $file->move(
+                    $this->container->getParameter('files_directory'),
+                    $uniqueName
+                );
+                $fileObject = $this->createAndSaveFileObject($user, $filename, $uniqueName, $type, $size, $post);
+            }
+            return $fileObject;
         }
 
-        return $fileObject;
+        return false;
     }
 }

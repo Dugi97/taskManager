@@ -1,0 +1,12 @@
+<div class="modal fade" id="viewPictureModal" tabindex="-1" role="dialog" aria-labelledby="viewPictureModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modaleImageHolder float-left" style="border: 4px solid aliceblue;">
+                <img class="modalImage img-fluid">
+                <div class="showComments" style="overflow: scroll">
+                    {{ render(controller('App\\Controller\\DefaultController::getComments', {post: post})) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

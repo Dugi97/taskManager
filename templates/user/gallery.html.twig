@@ -3,16 +3,20 @@
 {% block title %}User{% endblock %}
 
 {% block body %}
-    <div class="container galleryContainer">
-        <a href = "javascript:history.back()">Back to previous page</a>
-        <div class="row">
-            {% for image in user.files %}
-                <div class="col-3 mb-5 galleryItem">
-                    <a href="#">
-                        <img src="{{ image.url }}" class="img-fluid" style="height: 200px;width: 100%;">
-                        <div class="viewImageButton">Preview</div>
-                    </a>
-                </div>
+    <div class="galleryContainer">
+        <div>
+            <a href = "javascript: history.back()" class="text-white m-2">Back to previous page</a>
+        </div>
+        <h1>{{ user.fullname }}'s Gallery</h1>
+        <div class="gallery">
+            {% for post in user.posts %}
+                {% for image in post.files %}
+                    <div class="galleryItem" data-toggle="modal" data-target="#viewPictureModal">
+                        <img src="{{ image.url }}" class="viewImage" data-post="{{ post.id }}" data-url="{{ image.url }}">
+                        <p class="viewImageButton">Click for preview</p>
+                    </div>
+                {% endfor %}
+                {{ render(controller('App\\Controller\\DefaultController::getViewPictureModal', {post: post})) }}
             {% endfor %}
         </div>
     </div>

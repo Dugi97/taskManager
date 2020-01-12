@@ -100,23 +100,18 @@ $(function () {
     $("#mdb-lightbox-ui").load("mdb-addons/mdb-lightbox-ui.html");
 });
 
-$('.uploadProfilePicture').click(function (e) {
-    e.preventDefault();
-    $('#uploadProfilePicture').trigger('click');
-});
-
 $('img, .viewImage').click(function () {
-    let imageData = $(this).data('url');
+    let imageUrl = $(this).data('url');
 
     $('#viewPictureModal').show(function () {
         $('.modalImage').attr({
-            src: imageData,
+            src: imageUrl,
             alt:'Preview'
         });
-        $('.imgModalTitle').text('teext');
-    })
+    });
 });
 
+// Chat
 $('.chatInputField').keyup(function (e) {
     e.preventDefault();
     if (e.which == 13) {
@@ -136,4 +131,11 @@ $('.chatInputField').keyup(function (e) {
             }
         });
     }
+});
+
+$('.replay').click(function (e) {
+    e.preventDefault();
+    $('.commentId').val($(this).data('id'));
+    $(this).next('.replayArea').removeClass('d-none').addClass('d-inline');
+    // $(this:first).find('.replayArea').removeClass('d-none').addClass('d-inline').append($(this).data('user'));
 });

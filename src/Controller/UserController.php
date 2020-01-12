@@ -135,7 +135,6 @@ class UserController extends AbstractController
      * @Route("/upload/profile/picture", name="upload_profile_picture")
      * @param UploadService $uploadService
      * @param Request $request
-     * @param User $user
      * @return RedirectResponse
      * @throws Exception
      */
@@ -147,8 +146,8 @@ class UserController extends AbstractController
         $post->setUser($this->getUser());
         $dateAndTime = new DateTime();
         $post->setDateAndTime($dateAndTime->format('Y-m-d H:i:s'));
-        $post->setText('New picture');
-        $fileObject = $uploadService->uploadFile($request, $this->getUser(), $type = 'image', $post);
+        $post->setText('');
+        $fileObject = $uploadService->uploadFiles($request, $this->getUser(), $type = 'profile_image', $post);
         $entityManager->persist($post);
         $entityManager->flush();
         $request->request->set('selectedImageId', $fileObject->getId());
@@ -156,19 +155,19 @@ class UserController extends AbstractController
 
         return $this->redirect($request->server->get('HTTP_REFERER'));
     }
-
-    /**
-     * @Route("/send/message", name="send_message")
-     * @param Request $request
-     * @return Response
-     */
-    public function sendMessage(Request $request)
-    {
-        $message = $request->get('message');
-
-
-        return $this->render('user/gallery.html.twig', [
-            'user' => $user,
-        ]);
-    }
+//
+//    /**
+//     * @Route("/send/message", name="send_message")
+//     * @param Request $request
+//     * @return Response
+//     */
+//    public function sendMessage(Request $request)
+//    {
+//        $message = $request->get('message');
+//
+//
+//        return $this->render('user/gallery.html.twig', [
+//            'user' => $user,
+//        ]);
+//    }
 }
