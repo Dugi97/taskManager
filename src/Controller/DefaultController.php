@@ -40,15 +40,4 @@ class DefaultController extends AbstractController
             'post' => $post
         ]);
     }
-
-    /**
-     * @param $post
-     * @return Response
-     */
-    public function getComments($post)
-    {
-        return $this->render('embed/show_comments.html.twig', [
-            'post' => $post
-        ]);
-    }
 }

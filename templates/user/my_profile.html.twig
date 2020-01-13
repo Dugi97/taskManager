@@ -93,10 +93,11 @@
                                     </a>
                                 </div>
                             {% endif %}
-                            {{ render(controller('App\\Controller\\DefaultController::getComments', {post: post})) }}
-                            <form action="{{ path('leave_comment', {postId: post.id}) }}" method="post">
+                            <a href="" class="show-comments" data-id="{{ post.id }}">{{ post.comments|length + 1 }} comments</a>
+                            <div class="container-fluid show-comments">
+                            </div>
+                            <form class="commentForm" action="{{ path('leave_comment', {postId: post.id}) }}" method="post">
                                 <textarea name="commentInputField" id="commentInputField" class="commentInputField" placeholder="Leave a comment..."></textarea>
-                                <button type="submit" class="commentButton float-right">Comment</button>
                             </form>
                         </div>
                         {{ render(controller('App\\Controller\\DefaultController::getViewPictureModal', {post: post})) }}

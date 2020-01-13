@@ -110,7 +110,6 @@ $('img, .viewImage').click(function () {
         });
     });
 });
-
 // Chat
 $('.chatInputField').keyup(function (e) {
     e.preventDefault();
@@ -132,11 +131,45 @@ $('.chatInputField').keyup(function (e) {
         });
     }
 });
-
+$('.commentInputField').keyup(function (e) {
+    e.preventDefault();
+    if (e.which == 13) {
+        $(this).parent('.commentForm').submit();
+    }
+});
 $('.replay').click(function (e) {
     e.preventDefault();
     $('.commentId').val($(this).data('id'));
-    $(this).css('color', 'red');
-    $(this).find('.replayArea').removeClass('d-none').addClass('d-inline');
-    // $(this:first).find('.replayArea').removeClass('d-none').addClass('d-inline').append($(this).data('user'));
+    if ($(this).data('status') === 'replay') {
+        $(this).parent().parent().next().removeClass('d-none').addClass('d-block').find('.commentInputField').text('@'+$(this).data('user') + ' ');
+
+    } else {
+        $(this).parent().next().removeClass('d-none').addClass('d-block');
+    }
+});
+// Chat
+$('.show-comments').click(function (e) {
+    e.preventDefault();
+
+    let nextElemet = $(this).next(),
+        postId = $(this).data('id'),
+        offset = -5;
+        limit = 0;
+
+    $.ajax({
+        url: "/post/comments/"+postId,
+        type: "post",
+        data: {
+            offset: offset+5,
+            limit: limit+5
+        },
+        success: function(response)
+        {
+            $(nextElemet).append(response);
+        },
+        error: function(e)
+        {
+            console.log('error');
+        }
+    });
 });

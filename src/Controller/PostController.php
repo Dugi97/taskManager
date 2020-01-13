@@ -71,6 +71,7 @@ class PostController extends AbstractController
         $comment->setTime($dateAndTime->format('Y-m-d H:i:s'));
 
         if ($parentId != null) {
+            /** @var EntityManager $entityManager */
             $parentObject = $entityManager->getRepository(Comment::class)->find($parentId);
             /** @var Comment $parentObject */
             $comment->setParent($parentObject);
@@ -91,6 +92,24 @@ class PostController extends AbstractController
     {
         return $this->render('post/show.html.twig', [
             'post' => $post,
+        ]);
+    }
+
+    /**
+     * @Route("/comments/{postId}", name="get_comments", methods={"POST"})
+     * @param Request $request
+     * @param $postId
+     * @return Response
+     */
+    public function getComments(Request $request, $postId)
+    {
+        $post = $this->getDoctrine()->getRepository(Post::class)->findOneBy(['id' => $postId]);
+        $commentRepo = $this->getDoctrine()->getRepository(Comment::class);
+        $comments = $commentRepo->returnComments($postId, $request->get('limit'), $request->get('offset'));
+
+        return $this->render('embed/show_comments.html.twig', [
+            'post' => $post,
+            'comments' => $comments
         ]);
     }
 }

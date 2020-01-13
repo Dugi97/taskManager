@@ -211,6 +211,7 @@ footer {
 
 .galleryItem:hover {
     opacity: 0.5;
+    background-color: #696b69;
 }
 
 .galleryItem:hover .viewImageButton {
@@ -398,10 +399,18 @@ a.control_next {
     background-size: cover;
 }
 
-.replayDiv, .replayArea  {
-    width: 70%;
+.replayDiv {
+    width: 90%;
     min-height: 40px;
     height: auto;
     position: relative;
-    left: 5%;
+    left: 10%;
+}
+
+.replayArea  {
+    width: 90%;
+    min-height: 40px;
+    height: auto;
+    position: relative;
+    left: 10%;
 }
