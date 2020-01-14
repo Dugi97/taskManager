@@ -25,28 +25,15 @@ class CommentRepository extends ServiceEntityRepository
      * @param $offset
      * @return mixed
      */
-    public function returnComments($postId, $limit, $offset)
+    public function returnComments($postId, $offset)
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.postId = :postId')
-            ->setParameter('postId', $postId)
-            ->setMaxResults($limit)
+            ->andWhere('c.post = :post_id')
+            ->setParameter('post_id', $postId)
+            ->setMaxResults(5)
             ->setFirstResult($offset)
             ->getQuery()
             ->getResult()
         ;
     }
-
-
-    /*
-    public function findOneBySomeField($value): ?Comment
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

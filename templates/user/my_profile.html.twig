@@ -93,11 +93,13 @@
                                     </a>
                                 </div>
                             {% endif %}
-                            <a href="" class="show-comments" data-id="{{ post.id }}">{{ post.comments|length + 1 }} comments</a>
-                            <div class="container-fluid show-comments">
+                            <a href="" data-flag="hide" class="show-comments" data-id="{{ post.id }}" data-count="{{ post.comments|length }}">{{ post.comments|length }} comments</a>
+                            <div class="container-fluid">
                             </div>
+                            <a href="" class="show-more-comments d-none" data-offset="0" data-id="{{ post.id }}">Show more comments</a>
+
                             <form class="commentForm" action="{{ path('leave_comment', {postId: post.id}) }}" method="post">
-                                <textarea name="commentInputField" id="commentInputField" class="commentInputField" placeholder="Leave a comment..."></textarea>
+                                <textarea name="commentInputField" class="commentInputField" placeholder="Leave a comment..."></textarea>
                             </form>
                         </div>
                         {{ render(controller('App\\Controller\\DefaultController::getViewPictureModal', {post: post})) }}
@@ -106,7 +108,6 @@
             </div>
         </div>
     </div>
-
     <!-- Modal -->
     <div class="modal fade" id="editProfilePictureModal" tabindex="-1" role="dialog" aria-labelledby="editProfilePictureModal" aria-hidden="true">
         <div class="modal-dialog" role="document">

@@ -147,27 +147,60 @@ $('.replay').click(function (e) {
         $(this).parent().next().removeClass('d-none').addClass('d-block');
     }
 });
-// Chat
+
 $('.show-comments').click(function (e) {
     e.preventDefault();
-
-    let nextElemet = $(this).next(),
+    let thisElement = $(this),
+        nextElement = $(this).next(),
         postId = $(this).data('id'),
-        offset = -5;
-        limit = 0;
+        offset = 0;
+
+    if ($(this).data('flag') == 'hide') {
+        $.ajax({
+            url: "/post/comments/"+postId,
+            type: "post",
+            data: {
+                offset: offset
+            },
+            success: function(response)
+            {
+                $(nextElement).append(response);
+                $(thisElement).next().next().removeClass('d-none').addClass('d-block');
+                $(nextElement).removeClass('d-none').addClass('d-block-inline');
+                $(thisElement).data('flag', 'show');
+            },
+            error: function()
+            {
+                console.log('error');
+            }
+        });
+    } else {
+        $(this).data('flag', 'hide');
+        $(nextElement).empty();
+        $(nextElement).addClass('d-none');
+    }
+});
+
+$('.show-more-comments').click(function (e) {
+    e.preventDefault();
+
+    let thisElement = $(this),
+        commentsDiv = $(this).prev(),
+        postId = $(this).data('id'),
+        offset = parseInt($(this).attr('data-offset')) + 5;
 
     $.ajax({
         url: "/post/comments/"+postId,
         type: "post",
         data: {
-            offset: offset+5,
-            limit: limit+5
+            offset: offset
         },
         success: function(response)
         {
-            $(nextElemet).append(response);
+            $(commentsDiv).append(response);
+            $(thisElement).attr('data-offset', offset );
         },
-        error: function(e)
+        error: function()
         {
             console.log('error');
         }

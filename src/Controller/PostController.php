@@ -6,12 +6,14 @@ use App\Entity\Comment;
 use App\Entity\File;
 use App\Entity\Post;
 use App\Entity\User;
+use App\Repository\CommentRepository;
 use App\Repository\PostRepository;
 use App\Service\UploadService;
 use DateTime;
 use Doctrine\ORM\EntityManager;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -105,7 +107,8 @@ class PostController extends AbstractController
     {
         $post = $this->getDoctrine()->getRepository(Post::class)->findOneBy(['id' => $postId]);
         $commentRepo = $this->getDoctrine()->getRepository(Comment::class);
-        $comments = $commentRepo->returnComments($postId, $request->get('limit'), $request->get('offset'));
+        /** @var CommentRepository $commentRepo */
+        $comments = $commentRepo->returnComments($postId, $request->get('offset'));
 
         return $this->render('embed/show_comments.html.twig', [
             'post' => $post,

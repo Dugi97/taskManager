@@ -1,43 +1,42 @@
-<div class="allComents">
-    {% for comment in comments %}
-        {% if comment.parent is null %}
-            <div class="commentDiv">
-                <div class="mb-1">
-                    <img src="{{ comment.user.profilePicture }}" alt="" class="smallProfilePicture">
-                    <a href="{{ path('show_my_account', {accountAlias: comment.user.accountAlias}) }}">  {{ comment.user.fullname }}</a>
+{% for comment in comments %}
+    {% if comment.parent is null %}
+        <div class="commentDiv">
+            <div class="mb-1">
+                <img src="{{ comment.user.profilePicture }}" alt="" class="smallProfilePicture">
+                <a href="{{ path('show_my_account', {accountAlias: comment.user.accountAlias}) }}">  {{ comment.user.fullname }}</a>
+            </div>
+            <div style="border-bottom: 1px solid rgba(184,184,184, 0.5)">{{ comment.text }}</div>
+            <span class="replay font-weight-bold" data-id="{{ comment.id }}" data-user="{{ comment.user.fullname }}">Replay</span>
+            {% for replay in comment.comments %}
+                <div class="replayDiv">
+                    <div>
+                        <img src="{{ replay.user.profilePicture }}" alt="" class="smallProfilePicture">
+                        <a href="{{ path('show_my_account', {accountAlias: replay.user.accountAlias}) }}">  {{ replay.user.fullname }}</a>
+                    </div>
+                    <div style="border-bottom: 1px solid rgba(184,184,184, 0.5)">{{ replay.text }}</div>
+                    <span class="replay font-weight-bold" data-status="replay" data-id="{{ replay.id }}" data-user="{{ replay.user.fullname }}">Replay</span>
                 </div>
-                <div style="border-bottom: 1px solid rgba(184,184,184, 0.5)">{{ comment.text }}</div>
-                <span class="replay font-weight-bold" data-id="{{ comment.id }}" data-user="{{ comment.user.fullname }}">Replay</span>
-                {% for replay in comment.comments %}
+            {% endfor %}
+            {% for replay in comment.comments %}
+                {% for tagReplay in replay.comments %}
                     <div class="replayDiv">
                         <div>
-                            <img src="{{ replay.user.profilePicture }}" alt="" class="smallProfilePicture">
-                            <a href="{{ path('show_my_account', {accountAlias: replay.user.accountAlias}) }}">  {{ replay.user.fullname }}</a>
+                            <img src="{{ tagReplay.user.profilePicture }}" alt="" class="smallProfilePicture">
+                            <a href="{{ path('show_my_account', {accountAlias: tagReplay.user.accountAlias}) }}">  {{ tagReplay.user.fullname }}</a>
                         </div>
-                        <div style="border-bottom: 1px solid rgba(184,184,184, 0.5)">{{ replay.text }}</div>
-                        <span class="replay font-weight-bold" data-status="replay" data-id="{{ replay.id }}" data-user="{{ replay.user.fullname }}">Replay</span>
+                        <div style="border-bottom: 1px solid rgba(184,184,184, 0.5)">{{ tagReplay.text }}</div>
+                        <span class="replay font-weight-bold" data-status="replay" data-id="{{ tagReplay.id }}" data-user="{{ tagReplay.user.fullname }}">Replay</span>
                     </div>
                 {% endfor %}
-                {% for replay in comment.comments %}
-                    {% for tagReplay in replay.comments %}
-                        <div class="replayDiv">
-                            <div>
-                                <img src="{{ tagReplay.user.profilePicture }}" alt="" class="smallProfilePicture">
-                                <a href="{{ path('show_my_account', {accountAlias: tagReplay.user.accountAlias}) }}">  {{ tagReplay.user.fullname }}</a>
-                            </div>
-                            <div style="border-bottom: 1px solid rgba(184,184,184, 0.5)">{{ tagReplay.text }}</div>
-                            <span class="replay font-weight-bold" data-status="replay" data-id="{{ tagReplay.id }}" data-user="{{ tagReplay.user.fullname }}">Replay</span>
-                        </div>
-                    {% endfor %}
-                {% endfor %}
-            </div>
-            <div class="replayArea d-none">
-                <form class="commentForm" action="{{ path('leave_comment', {postId: post.id}) }}" method="post">
-                    <input type="text" name="commentId" class="d-none commentId">
-                    <textarea name="commentInputField" id="commentInputField" class="commentInputField" placeholder="Leave a comment..."></textarea>
-                </form>
-            </div>
-        {% endif %}
-    {% endfor %}
-</div>
+            {% endfor %}
+        </div>
+        <div class="replayArea d-none">
+            <form class="commentForm" action="{{ path('leave_comment', {postId: post.id}) }}" method="post">
+                <input type="text" name="commentId" class="d-none commentId">
+                <textarea name="commentInputField" class="commentInputField" placeholder="Leave a comment..."></textarea>
+            </form>
+        </div>
+    {% endif %}
+{% endfor %}
+
 
