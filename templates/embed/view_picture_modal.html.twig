@@ -7,6 +7,7 @@
                     <div class="showComments">
                         <a href="{{ path('get_comments', {postId: post.id}) }}">{{ post.comments|length }} comments</a>
                     </div>
+{#                    {{ render(controller('App\\Controller\\DefaultController::getComments', {post: post})) }}#}
                 </div>
             </div>
         </div>

@@ -267,11 +267,22 @@ footer {
 
 .commentInputField {
     width: 100%;
+    overflow: hidden;
+    padding: 10px;
+    font-size: 14px;
+    display: block;
+    border-radius: 6px;
 }
 
 .commentButton {
     border-top: none;
     background-color: white;
+}
+
+.commentForm {
+    width: 80%;
+    position: relative;
+    left: 10%;
 }
 
 .postText {
@@ -391,6 +402,10 @@ a.control_next {
     background-color: white;
 }
 
+.commentForm {
+    margin-top: 5px;
+}
+
 .smallProfilePicture {
     width: 25px;
     height: 25px;
@@ -408,6 +423,7 @@ a.control_next {
 }
 
 .replayArea  {
+    margin-top: 5px;
     width: 90%;
     min-height: 40px;
     height: auto;

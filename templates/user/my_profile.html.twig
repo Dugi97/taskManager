@@ -6,7 +6,7 @@
     <div class="container-fluid myProfileView">
         <input type="hidden" class="userId" value="{{ user.id }}">
         <div class="row">
-            <div class="col-4" style="border-right: 2px solid lightgray">
+            <div class="col-3" style="border-right: 2px solid lightgray">
                 <div class="profileData mt-3">
                     <div style="background-image: url({{ user.profilePicture }})" class="profileImageHolder" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ></div>
                     <div class="profileImageDropdown dropdown-menu">
@@ -50,7 +50,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-8">
+            <div class="col-6">
                 <h1 class="text-center">Posts</h1>
                 <div class="newPost">
                     <form action="{{ path('post_new') }}" class="postClass" method="post" enctype="multipart/form-data">
@@ -64,7 +64,7 @@
                     {% for post in allPosts|reverse %}
                         <div class="postAndComment m-0 mb-5">
                             <span><b>{{ post.user.fullname }}</b></span> in <span><b>{{ post.dateAndTime }}</b></span>
-                            <div class="postText">
+                            <div class="postText" style="border-bottom: 2px solid rgba(184,184,184, 0.5)">
                                 <p>{{ post.text }}</p>
                             </div>
                             {% if post.files|length == 1 %}
@@ -93,19 +93,26 @@
                                     </a>
                                 </div>
                             {% endif %}
-                            <a href="" data-flag="hide" class="show-comments" data-id="{{ post.id }}" data-count="{{ post.comments|length }}">{{ post.comments|length }} comments</a>
-                            <div class="container-fluid">
-                            </div>
-                            <a href="" class="show-more-comments d-none" data-offset="0" data-id="{{ post.id }}">Show more comments</a>
-
+                            {% if post.comments|length > 0 %}
+                                {% if post.comments|length <3 %}
+                                    {{ render(controller('App\\Controller\\PostController::getComments', {postId: post.id})) }}
+                                {% else %}
+                                    <a href="" data-flag="hide" class="show-comments" data-id="{{ post.id }}" data-count="{{ post.comments|length }}">{{ post.comments|length }} comments</a>
+                                    <div class="container-fluid comments-container">
+                                    </div>
+                                    <a href="" class="show-more-comments d-none" data-offset="0" data-id="{{ post.id }}">Show more comments</a>
+                                {% endif %}
+                            {% endif %}
                             <form class="commentForm" action="{{ path('leave_comment', {postId: post.id}) }}" method="post">
-                                <textarea name="commentInputField" class="commentInputField" placeholder="Leave a comment..."></textarea>
+                                <textarea name="commentInputField" class="commentInputField" rows='1' placeholder="Leave a comment..."></textarea>
+                                <button class="bg-transparent border-0"><img src="https://icons-for-free.com/iconfiles/png/512/envelope+letter+mail+message+send+sent+icon-1320162089456754985.png" style="width: 25px;" alt=""></button>
                             </form>
                         </div>
                         {{ render(controller('App\\Controller\\DefaultController::getViewPictureModal', {post: post})) }}
                     {% endfor %}
                 </div>
             </div>
+            <div class="col-3"></div>
         </div>
     </div>
     <!-- Modal -->

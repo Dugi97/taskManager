@@ -86,6 +86,12 @@ jQuery(document).ready(function ($) {
     });
 
 });
+$('.commentInputField').on('keyup keydown change', function() {
+    while(($(this).outerHeight() + 2) < this.scrollHeight + parseFloat($(this).css("borderTopWidth")) + parseFloat($(this).css("borderBottomWidth"))) {
+        $(this).height($(this).height()+1);
+    }
+});
+
 $('.selectedImage').click(function (e) {
     e.preventDefault();
 
@@ -176,6 +182,7 @@ $('.show-comments').click(function (e) {
         });
     } else {
         $(this).data('flag', 'hide');
+        $(thisElement).next().next().removeClass('d-block').addClass('d-none');
         $(nextElement).empty();
         $(nextElement).addClass('d-none');
     }
@@ -187,22 +194,29 @@ $('.show-more-comments').click(function (e) {
     let thisElement = $(this),
         commentsDiv = $(this).prev(),
         postId = $(this).data('id'),
-        offset = parseInt($(this).attr('data-offset')) + 5;
+        offset = parseInt($(this).attr('data-offset')) + 5,
+        divCount = $(thisElement).prev().children('.commentDiv').length;
 
-    $.ajax({
-        url: "/post/comments/"+postId,
-        type: "post",
-        data: {
-            offset: offset
-        },
-        success: function(response)
-        {
-            $(commentsDiv).append(response);
-            $(thisElement).attr('data-offset', offset );
-        },
-        error: function()
-        {
-            console.log('error');
-        }
-    });
+    if (divCount >= offset) {
+        $.ajax({
+            url: "/post/comments/"+postId,
+            type: "post",
+            data: {
+                offset: offset
+            },
+            success: function(response)
+            {
+                $(commentsDiv).append(response);
+                $(thisElement).attr('data-offset', offset );
+                let divCountNew = $(thisElement).prev().children('.commentDiv').length;
+                if (divCountNew % 5 != 0) {
+                   $(thisElement).removeClass('d-block').addClass('d-none');
+                }
+            },
+            error: function()
+            {
+                console.log('error');
+            }
+        });
+    }
 });
