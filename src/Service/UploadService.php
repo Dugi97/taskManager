@@ -63,7 +63,7 @@ class UploadService
      * @param $post
      * @return File|bool
      */
-    public function uploadFiles($request, $user, $type, $post)
+    public function uploadFiles($request, $user, $post)
     {
         $files = $request->files->get('files');
         if (!empty($files)) {
@@ -76,6 +76,8 @@ class UploadService
                     $this->container->getParameter('files_directory'),
                     $uniqueName
                 );
+                $type = $file->getMimeType();
+//                dump($file);die();
                 $fileObject = $this->createAndSaveFileObject($user, $filename, $uniqueName, $type, $size, $post);
             }
             return $fileObject;

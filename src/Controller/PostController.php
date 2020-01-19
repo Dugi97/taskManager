@@ -42,7 +42,7 @@ class PostController extends AbstractController
         $post->setUser($this->getUser());
         $dateAndTime = new DateTime();
         $post->setDateAndTime($dateAndTime->format('Y-m-d H:i:s'));
-        $uploadService->uploadFiles($request, $this->getUser(), $type = 'image', $post);
+        $uploadService->uploadFiles($request, $this->getUser(), $post);
         $entityManager->persist($post);
         $entityManager->flush();
 

@@ -56,7 +56,7 @@
                     <form action="{{ path('post_new') }}" class="postClass" method="post" enctype="multipart/form-data">
                         <textarea style="height: 150px" class="form-control" placeholder="Type new post..." name="newPost" id="newPost" rows="200" maxlength="255"></textarea>
                         <label for="uploadMedia" class="btn btn-primary m-1">Upload media <i class="fa fa-image"></i></label>
-                        <input id="uploadMedia" class="images d-none"type="file" accept='image/*' name="files[]" multiple="multiple">
+                        <input id="uploadMedia" class="images d-none"type="file" accept='image/*, video/mp4' name="files[]" multiple="multiple">
                         <button type="submit" class="btn btn-primary float-right m-1" value="submit">Publish</button>
                     </form>
                 </div>
@@ -67,7 +67,13 @@
                             <div class="postText" style="border-bottom: 2px solid rgba(184,184,184, 0.5)">
                                 <p>{{ post.text }}</p>
                             </div>
+{#                            <video width="400" controls>#}
+{#                                <source src="mov_bbb.mp4" type="video/mp4">#}
+{#                                <source src="mov_bbb.ogg" type="video/ogg">#}
+{#                                Your browser does not support HTML5 video.#}
+{#                            </video>#}
                             {% if post.files|length == 1 %}
+                                {{ dump(post.files[0].type) }}
                                 <img src="{{ asset(post.files[0].url) }}" alt="" data-url="{{ post.files[0].url }}" class="img-fluid center" data-toggle="modal" data-target="#viewPictureModal">
                             {% elseif post.files|length > 1 %}
                                 <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
