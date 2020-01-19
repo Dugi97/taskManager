@@ -3,42 +3,6 @@ require('../css/app.css');
 require('../../node_modules/bootstrap/dist/js/bootstrap.min.js');
 require('../../node_modules/bootstrap/dist/css/bootstrap.min.css');
 
-
-$('.commentButton').click(function () {
-    $(this).prev().slideDown()
-});
-// $('.images').change(function (e) {
-//     e.preventDefault();
-//     alert($(this).val());
-//     $('.newPostArea').val('<p>Aaaa</p>');
-// });
-// $('.postClass').submit(function (e) {
-//     e.preventDefault();
-//
-//     let userId = $('.userId').val(),
-//         data = new FormData(this);
-//
-//     $.ajax({
-//         url: "/post/new",
-//         type: "GET",
-//         data:  {
-//             data: data,
-//             userId: userId
-//         },
-//         contentType: false,
-//         cache: false,
-//         processData:false,
-//         success: function(response)
-//         {
-//             $('#newPost').append('<img src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80" class="img-fluid">')
-//         },
-//         error: function(e)
-//         {
-//             console.log('error');
-//         }
-//     });
-// });
-
 // Image slider
 jQuery(document).ready(function ($) {
 
@@ -116,34 +80,22 @@ $('img, .viewImage').click(function () {
         });
     });
 });
-// Chat
-$('.chatInputField').keyup(function (e) {
-    e.preventDefault();
-    if (e.which == 13) {
-        let message = $('.chatInputField').val();
-        $.ajax({
-            url: "/send/message",
-            type: "post",
-            data:  {
-                message: message,
-            },
-            success: function(response)
-            {
-            },
-            error: function(e)
-            {
-                console.log('error');
-            }
-        });
-    }
-});
+
 $('.commentInputField').keyup(function (e) {
     e.preventDefault();
     if (e.which == 13) {
         $(this).parent('.commentForm').submit();
     }
 });
-
+$('.replay').click(function (e) {
+    e.preventDefault();
+    $('.commentId').val($(this).data('id'));
+    if ($(this).data('status') === 'replay') {
+        $(this).parent().parent().next().removeClass('d-none').addClass('d-block').find('.commentInputField').empty().text('@'+$(this).data('user') + ' ');
+    } else {
+        $(this).parent().next().removeClass('d-none').addClass('d-block').find('.commentInputField').empty();
+    }
+});
 $('.show-comments').click(function (e) {
     e.preventDefault();
     let thisElement = $(this),

@@ -107,12 +107,28 @@ class PostController extends AbstractController
     {
         $post = $this->getDoctrine()->getRepository(Post::class)->findOneBy(['id' => $postId]);
         $commentRepo = $this->getDoctrine()->getRepository(Comment::class);
-        /** @var CommentRepository $commentRepo */
         $comments = $commentRepo->returnComments($postId, $request->get('offset'));
 
         return $this->render('embed/show_comments.html.twig', [
             'post' => $post,
             'comments' => $comments
+        ]);
+    }
+
+    /**
+     * @Route("/comment/replays/{commentId}", name="get_replays", methods={"POST"})
+     * @param Request $request
+     * @param $commentId
+     * @return Response
+     */
+    public function getReplays(Request $request, $commentId)
+    {
+        $comment = $this->getDoctrine()->getRepository(Comment::class)->findOneBy(['id' => $commentId]);
+        $commentRepo = $this->getDoctrine()->getRepository(Comment::class);
+        $replays = $commentRepo->returnReplays($commentId, $request->get('offset'));
+
+        return $this->render('embed/show_replay.html.twig', [
+            'replays' => $replays
         ]);
     }
 }

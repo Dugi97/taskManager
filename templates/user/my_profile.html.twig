@@ -94,10 +94,10 @@
                                 </div>
                             {% endif %}
                             {% if post.comments|length > 0 %}
-                                {% if post.comments|length <3 %}
+                                {% if post.comments|length < 3 %}
                                     {{ render(controller('App\\Controller\\PostController::getComments', {postId: post.id})) }}
                                 {% else %}
-                                    <a href="" data-flag="hide" class="show-comments" data-id="{{ post.id }}" data-count="{{ post.comments|length }}">{{ post.comments|length }} comments</a>
+                                    <span data-flag="hide" class="show-comments" data-id="{{ post.id }}" data-count="{{ post.comments|length }}">{{ post.comments|length }} comments</span>
                                     <div class="container-fluid comments-container">
                                     </div>
                                     <a href="" class="show-more-comments d-none" data-offset="0" data-id="{{ post.id }}">Show more comments</a>

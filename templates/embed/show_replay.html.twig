@@ -1,0 +1,33 @@
+{% for replay in replays %}
+    <div class="replayDiv">
+        <div>
+            <img src="{{ replay.user.profilePicture }}" alt="" class="smallProfilePicture">
+            <a href="{{ path('show_my_account', {accountAlias: replay.user.accountAlias}) }}">  {{ replay.user.fullname }}</a>
+        </div>
+        <div style="border-bottom: 1px solid rgba(184,184,184, 0.5)">{{ replay.text }}</div>
+        <span class="replay font-weight-bold" data-status="replay" data-id="{{ replay.id }}" data-user="{{ replay.user.fullname }}">Replay</span>
+    </div>
+{% endfor %}
+{% for replay in replays %}
+    {% for tagReplay in replay.comments %}
+        <div class="replayDiv">
+            <div>
+                <img src="{{ tagReplay.user.profilePicture }}" alt="" class="smallProfilePicture">
+                <a href="{{ path('show_my_account', {accountAlias: tagReplay.user.accountAlias}) }}">  {{ tagReplay.user.fullname }}</a>
+            </div>
+            <div style="border-bottom: 1px solid rgba(184,184,184, 0.5)">{{ tagReplay.text }}</div>
+            <span class="replay font-weight-bold" data-status="replay" data-id="{{ tagReplay.id }}" data-user="{{ tagReplay.user.fullname }}">Replay</span>
+        </div>
+    {% endfor %}
+{% endfor %}
+<script>
+    $('.replay').click(function (e) {
+        e.preventDefault();
+        $('.commentId').val($(this).data('id'));
+        if ($(this).data('status') === 'replay') {
+            $(this).parent().parent().next().removeClass('d-none').addClass('d-block').find('.commentInputField').empty().text('@'+$(this).data('user') + ' ');
+        } else {
+            $(this).parent().next().removeClass('d-none').addClass('d-block').find('.commentInputField').empty();
+        }
+    });
+</script>

@@ -36,4 +36,16 @@ class CommentRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    public function returnReplays($commentId, $offset)
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.parent = :parent_id')
+            ->setParameter('parent_id', $commentId)
+            ->setMaxResults(5)
+            ->setFirstResult($offset)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
 }

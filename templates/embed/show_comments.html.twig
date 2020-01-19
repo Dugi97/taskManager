@@ -7,28 +7,11 @@
             </div>
             <div style="border-bottom: 1px solid rgba(184,184,184, 0.5)">{{ comment.text }}</div>
             <span class="replay font-weight-bold" data-id="{{ comment.id }}" data-user="{{ comment.user.fullname }}">Replay</span>
-            {% for replay in comment.comments %}
-                <div class="replayDiv">
-                    <div>
-                        <img src="{{ replay.user.profilePicture }}" alt="" class="smallProfilePicture">
-                        <a href="{{ path('show_my_account', {accountAlias: replay.user.accountAlias}) }}">  {{ replay.user.fullname }}</a>
-                    </div>
-                    <div style="border-bottom: 1px solid rgba(184,184,184, 0.5)">{{ replay.text }}</div>
-                    <span class="replay font-weight-bold" data-status="replay" data-id="{{ replay.id }}" data-user="{{ replay.user.fullname }}">Replay</span>
-                </div>
-            {% endfor %}
-            {% for replay in comment.comments %}
-                {% for tagReplay in replay.comments %}
-                    <div class="replayDiv">
-                        <div>
-                            <img src="{{ tagReplay.user.profilePicture }}" alt="" class="smallProfilePicture">
-                            <a href="{{ path('show_my_account', {accountAlias: tagReplay.user.accountAlias}) }}">  {{ tagReplay.user.fullname }}</a>
-                        </div>
-                        <div style="border-bottom: 1px solid rgba(184,184,184, 0.5)">{{ tagReplay.text }}</div>
-                        <span class="replay font-weight-bold" data-status="replay" data-id="{{ tagReplay.id }}" data-user="{{ tagReplay.user.fullname }}">Replay</span>
-                    </div>
-                {% endfor %}
-            {% endfor %}
+            {% if comment.comments|length > 0 %}
+                <span data-flag="hide" class="show-replays" data-id="{{ comment.id }}" data-count="{{ comment.comments|length }}">Show replays</span>
+                <div class="replays-container"></div>
+                <a href="" class="show-more-replays d-none" data-offset="0" data-id="{{ comment.id }}">Show more replays</a>
+            {% endif %}
         </div>
         <div class="replayArea d-none">
             <form class="commentForm" action="{{ path('leave_comment', {postId: post.id}) }}" method="post">
@@ -46,6 +29,79 @@
             $(this).parent().parent().next().removeClass('d-none').addClass('d-block').find('.commentInputField').empty().text('@'+$(this).data('user') + ' ');
         } else {
             $(this).parent().next().removeClass('d-none').addClass('d-block').find('.commentInputField').empty();
+        }
+    });
+    $('.show-replays').click(function (e) {
+        e.preventDefault();
+
+        let thisElement = $(this),
+            nextElement = $(this).next(),
+            commentId = $(this).data('id'),
+            offset = 0;
+
+        if ($(this).data('flag') == 'hide') {
+            $.ajax({
+                url: "/post/comment/replays/"+commentId,
+                type: "post",
+                data: {
+                    offset: offset
+                },
+                success: function(response)
+                {
+                    $(nextElement).append(response);
+                    $(thisElement).next().next().removeClass('d-none').addClass('d-block');
+                    $(nextElement).removeClass('d-none').addClass('d-block-inline');
+                    $(thisElement).data('flag', 'show');
+                },
+                error: function()
+                {
+                    console.log('error');
+                }
+            });
+        } else {
+            $(this).data('flag', 'hide');
+            $(thisElement).next().next().removeClass('d-block').addClass('d-none');
+            $(nextElement).empty();
+            $(nextElement).addClass('d-none');
+        }
+    });
+
+    $('.show-more-replays').click(function (e) {
+        e.preventDefault();
+        let thisElement = $(this),
+            commentsDiv = $(this).prev(),
+            commentId = $(this).data('id'),
+            offset = parseInt($(this).attr('data-offset')) + 5,
+            divCount = $(thisElement).prev().children('.replayDiv').length;
+
+        if (divCount >= offset) {
+            $.ajax({
+                url: "/post/comment/replays/"+commentId,
+                type: "post",
+                data: {
+                    offset: offset
+                },
+                success: function(response)
+                {
+                    $(commentsDiv).append(response);
+                    $(thisElement).attr('data-offset', offset );
+                    let divCountNew = $(thisElement).prev().children('.replayDiv').length;
+                    if (divCountNew % 5 != 0) {
+                        $(thisElement).removeClass('d-block').addClass('d-none');
+                    }
+                },
+                error: function()
+                {
+                    console.log('error');
+                }
+            });
+        }
+    });
+
+    $('.commentInputField').keyup(function (e) {
+        e.preventDefault();
+        if (e.which == 13) {
+            $(this).parent('.commentForm').submit();
         }
     });
 </script>
