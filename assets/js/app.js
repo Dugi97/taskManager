@@ -143,16 +143,6 @@ $('.commentInputField').keyup(function (e) {
         $(this).parent('.commentForm').submit();
     }
 });
-$('.replay').click(function (e) {
-    e.preventDefault();
-    $('.commentId').val($(this).data('id'));
-    if ($(this).data('status') === 'replay') {
-        $(this).parent().parent().next().removeClass('d-none').addClass('d-block').find('.commentInputField').text('@'+$(this).data('user') + ' ');
-
-    } else {
-        $(this).parent().next().removeClass('d-none').addClass('d-block');
-    }
-});
 
 $('.show-comments').click(function (e) {
     e.preventDefault();

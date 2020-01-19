@@ -19,7 +19,7 @@
                     </div>
                     <div data-toggle="modal" data-target="#editProfileDataModal"><img src="https://cdn4.iconfinder.com/data/icons/design-4/100/14-512.png" alt="" style="width: 30px;float: right"></div>
 {#                    Hi, i am {{ user.fullName }}, a zanimanje form {{ user.countryAndCity }}. I'm have #}
-                    <table class="table table-bordered table-light basicInfoTable">
+                    <table class="table table-bordered table-light basicInfoTable w-75">
                         <tr>
                             <td class="pr-5">Name:</td>
                             <td><b>{{ user.fullName }}</b></td>
@@ -105,7 +105,6 @@
                             {% endif %}
                             <form class="commentForm" action="{{ path('leave_comment', {postId: post.id}) }}" method="post">
                                 <textarea name="commentInputField" class="commentInputField" rows='1' placeholder="Leave a comment..."></textarea>
-                                <button class="bg-transparent border-0"><img src="https://icons-for-free.com/iconfiles/png/512/envelope+letter+mail+message+send+sent+icon-1320162089456754985.png" style="width: 25px;" alt=""></button>
                             </form>
                         </div>
                         {{ render(controller('App\\Controller\\DefaultController::getViewPictureModal', {post: post})) }}

@@ -31,17 +31,23 @@
             {% endfor %}
         </div>
         <div class="replayArea d-none">
-            <form class="commentForm form-inline" action="{{ path('leave_comment', {postId: post.id}) }}" method="post">
+            <form class="commentForm" action="{{ path('leave_comment', {postId: post.id}) }}" method="post">
                 <input type="text" name="commentId" class="d-none commentId">
-                <div class="form-group">
-                    <textarea name="commentInputField" rows='1' class="commentInputField form-group" placeholder="Leave a comment..."></textarea>
-                </div>
-                <div class="form-group">
-                    <button class="bg-transparent border-0 form-group"><img src="https://icons-for-free.com/iconfiles/png/512/envelope+letter+mail+message+send+sent+icon-1320162089456754985.png" style="width: 25px;" alt=""></button>
-                </div>
+                <textarea name="commentInputField" rows='1' class="commentInputField form-group" placeholder="Leave a comment..."></textarea>
             </form>
         </div>
     {% endif %}
 {% endfor %}
+<script>
+    $('.replay').click(function (e) {
+        e.preventDefault();
+        $('.commentId').val($(this).data('id'));
+        if ($(this).data('status') === 'replay') {
+            $(this).parent().parent().next().removeClass('d-none').addClass('d-block').find('.commentInputField').empty().text('@'+$(this).data('user') + ' ');
+        } else {
+            $(this).parent().next().removeClass('d-none').addClass('d-block').find('.commentInputField').empty();
+        }
+    });
+</script>
 
 
