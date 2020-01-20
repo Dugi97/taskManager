@@ -43,12 +43,12 @@ class Post
     private $likes;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\File", mappedBy="post")
+     * @ORM\OneToMany(targetEntity="App\Entity\File", mappedBy="post", cascade={"remove"})
      */
     private $files;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="post")
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="post", cascade={"remove"})
      */
     private $comments;
 

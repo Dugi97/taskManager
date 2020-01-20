@@ -136,6 +136,7 @@ footer {
 
 .myProfileView {
     background-color: aliceblue;
+    min-height: 950px;
 }
 
 .viewImageButton {
@@ -332,6 +333,15 @@ h1 {
     background: #ccc;
     text-align: center;
     line-height: 300px;
+}
+
+.cursorHover:hover {
+    cursor: pointer;
+}
+
+.postDropdown {
+    position: relative;
+    right: 0;
 }
 
 a.control_prev, a.control_next {

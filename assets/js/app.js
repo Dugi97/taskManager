@@ -87,7 +87,7 @@ $('.commentInputField').keyup(function (e) {
         $(this).parent('.commentForm').submit();
     }
 });
-$('.replay').click(function (e) {
+$(document).on('click', '.replay', function(e) {
     e.preventDefault();
     $('.commentId').val($(this).data('id'));
     if ($(this).data('status') === 'replay') {
@@ -96,7 +96,7 @@ $('.replay').click(function (e) {
         $(this).parent().next().removeClass('d-none').addClass('d-block').find('.commentInputField').empty();
     }
 });
-$('.show-comments').click(function (e) {
+$(document).on('click', '.show-comments', function (e) {
     e.preventDefault();
     let thisElement = $(this),
         nextElement = $(this).next(),
@@ -129,8 +129,41 @@ $('.show-comments').click(function (e) {
         $(nextElement).addClass('d-none');
     }
 });
+// $('.show-comments').click(function (e) {
+//     e.preventDefault();
+//     let thisElement = $(this),
+//         nextElement = $(this).next(),
+//         postId = $(this).data('id'),
+//         offset = 0;
+//
+//     if ($(this).data('flag') == 'hide') {
+//         $.ajax({
+//             url: "/post/comments/"+postId,
+//             type: "post",
+//             data: {
+//                 offset: offset
+//             },
+//             success: function(response)
+//             {
+//                 $(nextElement).append(response);
+//                 $(thisElement).next().next().removeClass('d-none').addClass('d-block');
+//                 $(nextElement).removeClass('d-none').addClass('d-block-inline');
+//                 $(thisElement).data('flag', 'show');
+//             },
+//             error: function()
+//             {
+//                 console.log('error');
+//             }
+//         });
+//     } else {
+//         $(this).data('flag', 'hide');
+//         $(thisElement).next().next().removeClass('d-block').addClass('d-none');
+//         $(nextElement).empty();
+//         $(nextElement).addClass('d-none');
+//     }
+// });
 
-$('.show-more-comments').click(function (e) {
+$(document).on('click', '.show-more-comments', function (e) {
     e.preventDefault();
 
     let thisElement = $(this),
@@ -160,5 +193,78 @@ $('.show-more-comments').click(function (e) {
                 console.log('error');
             }
         });
+    }
+});
+
+$(document).on('click', '.show-replays', function (e) {
+    e.preventDefault();
+
+    let thisElement = $(this),
+        nextElement = $(this).next(),
+        commentId = $(this).data('id'),
+        offset = 0;
+
+    if ($(this).data('flag') == 'hide') {
+        $.ajax({
+            url: "/post/comment/replays/"+commentId,
+            type: "post",
+            data: {
+                offset: offset
+            },
+            success: function(response)
+            {
+                $(nextElement).append(response);
+                $(thisElement).next().next().removeClass('d-none').addClass('d-block');
+                $(nextElement).removeClass('d-none').addClass('d-block-inline');
+                $(thisElement).data('flag', 'show');
+            },
+            error: function()
+            {
+                console.log('error');
+            }
+        });
+    } else {
+        $(this).data('flag', 'hide');
+        $(thisElement).next().next().removeClass('d-block').addClass('d-none');
+        $(nextElement).empty();
+        $(nextElement).addClass('d-none');
+    }
+});
+
+$(document).on('click', '.show-more-replays', function (e) {
+    e.preventDefault();
+    let thisElement = $(this),
+        commentsDiv = $(this).prev(),
+        commentId = $(this).data('id'),
+        offset = parseInt($(this).attr('data-offset')) + 5,
+        divCount = $(thisElement).prev().children('.replayDiv').length;
+
+    if (divCount >= offset) {
+        $.ajax({
+            url: "/post/comment/replays/"+commentId,
+            type: "post",
+            data: {
+                offset: offset
+            },
+            success: function(response)
+            {
+                $(commentsDiv).append(response);
+                $(thisElement).attr('data-offset', offset );
+                let divCountNew = $(thisElement).prev().children('.replayDiv').length;
+                if (divCountNew % 5 != 0) {
+                    $(thisElement).removeClass('d-block').addClass('d-none');
+                }
+            },
+            error: function()
+            {
+                console.log('error');
+            }
+        });
+    }
+});
+$(document).on('keyup', '.commentInputField', function (e) {
+    e.preventDefault();
+    if (e.which == 13) {
+        $(this).parent('.commentForm').submit();
     }
 });

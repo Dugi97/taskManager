@@ -21,11 +21,10 @@ class CommentRepository extends ServiceEntityRepository
 
     /**
      * @param $postId
-     * @param $limit
      * @param $offset
      * @return mixed
      */
-    public function returnComments($postId, $offset)
+    public function returnCommentsOffset($postId, $offset)
     {
         return $this->createQueryBuilder('c')
             ->andWhere('c.post = :post_id')
@@ -37,7 +36,7 @@ class CommentRepository extends ServiceEntityRepository
         ;
     }
 
-    public function returnReplays($commentId, $offset)
+    public function returnReplaysOffset($commentId, $offset)
     {
         return $this->createQueryBuilder('c')
             ->andWhere('c.parent = :parent_id')
@@ -47,5 +46,10 @@ class CommentRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
             ;
+    }
+
+    public function returnReplaysByPostId($postId)
+    {
+
     }
 }

@@ -8,7 +8,11 @@
         <div class="row">
             <div class="col-3" style="border-right: 2px solid lightgray">
                 <div class="profileData mt-3">
-                    <div style="background-image: url({{ user.profilePicture }})" class="profileImageHolder" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ></div>
+                    {% if user.profilePicture is not empty %}
+                        <div style="background-image: url({{ user.profilePicture }});border: 0.5px solid lightgrey" class="profileImageHolder" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ></div>
+                    {% else %}
+                        <div style="background-image: url('https://kingsteigntonschool.org/wp-content/uploads/2015/07/facebook-default-no-profile-pic.jpg');border: 0.5px solid lightgrey" class="profileImageHolder cursorHover" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ></div>
+                    {% endif %}
                     <div class="profileImageDropdown dropdown-menu">
                         <a class="dropdown-item viewImage" data-url="{{ user.profilePicture }}" href="#" data-toggle="modal" data-target="#viewPictureModal">View image</a>
                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#editProfilePictureModal">Select new image</a>
@@ -56,14 +60,23 @@
                     <form action="{{ path('post_new') }}" class="postClass" method="post" enctype="multipart/form-data">
                         <textarea style="height: 150px" class="form-control" placeholder="Type new post..." name="newPost" id="newPost" rows="200" maxlength="255"></textarea>
                         <label for="uploadMedia" class="btn btn-primary m-1">Upload media <i class="fa fa-image"></i></label>
-                        <input id="uploadMedia" class="images d-none"type="file" accept='image/*, video/mp4' name="files[]" multiple="multiple">
+                        <input id="uploadMedia" class="images d-none" type="file" accept='image/*' name="files[]" multiple="multiple">
                         <button type="submit" class="btn btn-primary float-right m-1" value="submit">Publish</button>
                     </form>
                 </div>
                 <div class="myPosts">
                     {% for post in allPosts|reverse %}
                         <div class="postAndComment m-0 mb-5">
-                            <span><b>{{ post.user.fullname }}</b></span> in <span><b>{{ post.dateAndTime }}</b></span>
+                            <div class="row">
+                                <div class="col-6"><span><b>{{ post.user.fullname }}</b></span> in <span><b>{{ post.dateAndTime }}</b></span></div>
+                                <div class="col-6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <img class="float-right cursorHover" src="https://cdn3.iconfinder.com/data/icons/web-basics-vol-03/512/menu_options_three_points_selection_select-512.png" style="width: 20px" alt="">
+                                    <div class="postDropdown dropdown-menu ">
+                                        <a href="{{ path('delete_post', {postId: post.id}) }}" class="dropdown-item viewImage">Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="postText" style="border-bottom: 2px solid rgba(184,184,184, 0.5)">
                                 <p>{{ post.text }}</p>
                             </div>
@@ -73,7 +86,6 @@
 {#                                Your browser does not support HTML5 video.#}
 {#                            </video>#}
                             {% if post.files|length == 1 %}
-                                {{ dump(post.files[0].type) }}
                                 <img src="{{ asset(post.files[0].url) }}" alt="" data-url="{{ post.files[0].url }}" class="img-fluid center" data-toggle="modal" data-target="#viewPictureModal">
                             {% elseif post.files|length > 1 %}
                                 <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">

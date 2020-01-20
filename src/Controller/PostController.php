@@ -36,13 +36,15 @@ class PostController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         $post = new Post();
-        $post->setText($request->get('newPost'));
+        $requestPostText = $request->get('newPost');
+        $postText = isset($requestPostText)? $requestPostText : '';
+        $post->setText($postText);
 
         /** @var User $this */
         $post->setUser($this->getUser());
         $dateAndTime = new DateTime();
         $post->setDateAndTime($dateAndTime->format('Y-m-d H:i:s'));
-        $uploadService->uploadFiles($request, $this->getUser(), $post);
+        $uploadService->uploadFiles($request, $this->getUser(), $post, null);
         $entityManager->persist($post);
         $entityManager->flush();
 
@@ -107,7 +109,7 @@ class PostController extends AbstractController
     {
         $post = $this->getDoctrine()->getRepository(Post::class)->findOneBy(['id' => $postId]);
         $commentRepo = $this->getDoctrine()->getRepository(Comment::class);
-        $comments = $commentRepo->returnComments($postId, $request->get('offset'));
+        $comments = $commentRepo->returnCommentsOffset($postId, $request->get('offset'));
 
         return $this->render('embed/show_comments.html.twig', [
             'post' => $post,
@@ -125,10 +127,31 @@ class PostController extends AbstractController
     {
         $comment = $this->getDoctrine()->getRepository(Comment::class)->findOneBy(['id' => $commentId]);
         $commentRepo = $this->getDoctrine()->getRepository(Comment::class);
-        $replays = $commentRepo->returnReplays($commentId, $request->get('offset'));
+        $replays = $commentRepo->returnReplaysOffset($commentId, $request->get('offset'));
 
         return $this->render('embed/show_replay.html.twig', [
             'replays' => $replays
         ]);
+    }
+
+    /**
+     * @Route("/delete/{postId}", name="delete_post", methods={"GET"})
+     * @param Request $request
+     * @param $postId
+     * @return RedirectResponse
+     */
+    public function deletePost(Request $request, $postId)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $post = $entityManager->getRepository(Post::class)->find($postId);
+        $relatedReplays = $entityManager = $entityManager->getRepository(Comment::class)->findBy(['post' => $postId]);
+        dd($relatedReplays);
+//        foreach ($relatedFiles as $file) {
+//            $entityManager->remove($file);
+//        }
+        $entityManager->remove($post);
+        $entityManager->flush();
+
+        return $this->redirect($request->server->get('HTTP_REFERER'));
     }
 }

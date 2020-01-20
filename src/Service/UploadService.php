@@ -59,11 +59,11 @@ class UploadService
     /**
      * @param $request
      * @param $user
-     * @param $type
+     * @param null $fileType
      * @param $post
      * @return File|bool
      */
-    public function uploadFiles($request, $user, $post)
+    public function uploadFiles($request, $user, $post, $fileType = null)
     {
         $files = $request->files->get('files');
         if (!empty($files)) {
@@ -76,13 +76,13 @@ class UploadService
                     $this->container->getParameter('files_directory'),
                     $uniqueName
                 );
-                $type = $file->getMimeType();
+//                $type = $file->getMimeType();
+                $type = isset($fileType) ? $fileType : 'image';
 //                dump($file);die();
                 $fileObject = $this->createAndSaveFileObject($user, $filename, $uniqueName, $type, $size, $post);
             }
             return $fileObject;
         }
-
         return false;
     }
 }

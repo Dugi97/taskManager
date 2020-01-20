@@ -147,7 +147,7 @@ class UserController extends AbstractController
         $dateAndTime = new DateTime();
         $post->setDateAndTime($dateAndTime->format('Y-m-d H:i:s'));
         $post->setText('');
-        $fileObject = $uploadService->uploadFiles($request, $this->getUser(), $type = 'profile_image', $post);
+        $fileObject = $uploadService->uploadFiles($request, $this->getUser(), $post, $type = 'profile_image');
         $entityManager->persist($post);
         $entityManager->flush();
         $request->request->set('selectedImageId', $fileObject->getId());
