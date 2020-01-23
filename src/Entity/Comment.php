@@ -28,28 +28,9 @@ class Comment
      */
     private $post;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Comment", inversedBy="children")
-     */
-    private $comment;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="comment")
-     */
-    private $children;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Comment", inversedBy="comments")
-     */
-    private $parent;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="parent")
-     */
-    private $comments;
-
-    /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="text", length=600)
      */
     private $text;
 
@@ -58,10 +39,13 @@ class Comment
      */
     private $time;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $parent;
+
     public function __construct()
     {
-        $this->children = new ArrayCollection();
-        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -93,104 +77,6 @@ class Comment
         return $this;
     }
 
-    public function getComment(): ?self
-    {
-        return $this->comment;
-    }
-
-    public function setComment(?self $comment): self
-    {
-        $this->comment = $comment;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|self[]
-     */
-    public function getChildren(): Collection
-    {
-        return $this->children;
-    }
-
-    public function addChild(self $child): self
-    {
-        if (!$this->children->contains($child)) {
-            $this->children[] = $child;
-            $child->setComment($this);
-        }
-
-        return $this;
-    }
-
-    public function removeChild(self $child): self
-    {
-        if ($this->children->contains($child)) {
-            $this->children->removeElement($child);
-            // set the owning side to null (unless already changed)
-            if ($child->getComment() === $this) {
-                $child->setComment(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getParent(): ?self
-    {
-        return $this->parent;
-    }
-
-    public function setParent(?self $parent): self
-    {
-        $this->parent = $parent;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|self[]
-     */
-    public function getComments(): Collection
-    {
-        return $this->comments;
-    }
-
-    public function addComment(self $comment): self
-    {
-        if (!$this->comments->contains($comment)) {
-            $this->comments[] = $comment;
-            $comment->setParent($this);
-        }
-
-        return $this;
-    }
-
-    public function removeComment(self $comment): self
-    {
-        if ($this->comments->contains($comment)) {
-            $this->comments->removeElement($comment);
-            // set the owning side to null (unless already changed)
-            if ($comment->getParent() === $this) {
-                $comment->setParent(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getText(): ?string
-    {
-        return $this->text;
-    }
-
-    public function setText(string $text): self
-    {
-        $this->text = $text;
-
-        return $this;
-    }
-
     public function getTime(): ?string
     {
         return $this->time;
@@ -201,5 +87,37 @@ class Comment
         $this->time = $time;
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * @param mixed $parent
+     */
+    public function setParent($parent): void
+    {
+        $this->parent = $parent;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getText()
+    {
+        return $this->text;
+    }
+
+    /**
+     * @param mixed $text
+     */
+    public function setText($text): void
+    {
+        $this->text = $text;
     }
 }

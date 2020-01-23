@@ -73,14 +73,7 @@ class PostController extends AbstractController
         $comment->setUser($this->getUser());
         $dateAndTime = new DateTime();
         $comment->setTime($dateAndTime->format('Y-m-d H:i:s'));
-
-        if ($parentId != null) {
-            /** @var EntityManager $entityManager */
-            $parentObject = $entityManager->getRepository(Comment::class)->find($parentId);
-            /** @var Comment $parentObject */
-            $comment->setParent($parentObject);
-            $parentObject->addChild($comment);
-        }
+        !empty($parentId) ? $comment->setParent($parentId) : $comment->setParent('');
         $this->getDoctrine()->getManager()->persist($comment);
         $this->getDoctrine()->getManager()->flush();
 

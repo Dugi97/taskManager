@@ -71,6 +71,11 @@ class UserController extends AbstractController
     public function showMyAccout(User $user): Response
     {
         $editProfileForm = $this->createForm(UserType::class, $user);
+//        foreach ($user->getPosts() as $post) {
+//            foreach ($post->getComments() as $comment) {
+//                dump($comment);
+//            }
+//        }die();
 
         return $this->render('user/my_profile.html.twig', [
             'user' => $user,

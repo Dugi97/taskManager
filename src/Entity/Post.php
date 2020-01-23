@@ -28,7 +28,7 @@ class Post
     private $user;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="text", length=600)
      */
     private $text;
 
@@ -71,18 +71,6 @@ class Post
     public function setUser(?User $user): self
     {
         $this->user = $user;
-
-        return $this;
-    }
-
-    public function getText(): ?string
-    {
-        return $this->text;
-    }
-
-    public function setText(string $text): self
-    {
-        $this->text = $text;
 
         return $this;
     }
@@ -178,5 +166,21 @@ class Post
         }
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getText()
+    {
+        return $this->text;
+    }
+
+    /**
+     * @param mixed $text
+     */
+    public function setText($text): void
+    {
+        $this->text = $text;
     }
 }

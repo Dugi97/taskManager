@@ -268,3 +268,22 @@ $(document).on('keyup', '.commentInputField', function (e) {
         $(this).parent('.commentForm').submit();
     }
 });
+
+$("#uploadMedia").change(function() {
+    for (i = 0; i < this.files.length; i++) {
+        var reader = new FileReader();
+        reader.onload = imageIsLoaded;
+        reader.readAsDataURL(this.files[i]);
+
+    }
+    // if (this.files && this.files[0]) {
+    //     var reader = new FileReader();
+    //     reader.onload = imageIsLoaded;
+    //     reader.readAsDataURL(this.files[0]);
+    // }
+});
+
+function imageIsLoaded(e) {
+    var picture = '<img style="width: 100px;border: 2px solid lightgrey;margin:2px" class="img-fluid viewImage" id="image-3" src="' + e.target.result + '">';
+    $(".previewImage").append(picture);
+};

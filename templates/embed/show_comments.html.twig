@@ -2,7 +2,7 @@
     {% if comment.parent is null %}
         <div class="commentDiv">
             <div class="mb-1">
-                <img src="{{ comment.user.profilePicture }}" alt="" class="smallProfilePicture">
+                <img src="{{ comment.user.profilePicture }}" alt="" class="mediumProfilePicture">
                 <a href="{{ path('show_my_account', {accountAlias: comment.user.accountAlias}) }}">  {{ comment.user.fullname }}</a>
             </div>
             <div style="border-bottom: 1px solid rgba(184,184,184, 0.5)">{{ comment.text }}</div>
