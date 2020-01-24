@@ -70,7 +70,7 @@ $(function () {
     $("#mdb-lightbox-ui").load("mdb-addons/mdb-lightbox-ui.html");
 });
 
-$('img, .viewImage').click(function () {
+$('.viewImage').click(function () {
     let imageUrl = $(this).data('url');
 
     $('#viewPictureModal').show(function () {
@@ -81,17 +81,12 @@ $('img, .viewImage').click(function () {
     });
 });
 
-$('.commentInputField').keyup(function (e) {
-    e.preventDefault();
-    if (e.which == 13) {
-        $(this).parent('.commentForm').submit();
-    }
-});
 $(document).on('click', '.replay', function(e) {
     e.preventDefault();
     $('.commentId').val($(this).data('id'));
     if ($(this).data('status') === 'replay') {
-        $(this).parent().parent().next().removeClass('d-none').addClass('d-block').find('.commentInputField').empty().text('@'+$(this).data('user') + ' ');
+        $(this).find('.replayDiv').removeClass('d-none').addClass('d-block');
+        // $(this).parent().parent().next().removeClass('d-none').addClass('d-block').find('.commentInputField').empty().text('@'+$(this).data('user') + ' ');
     } else {
         $(this).parent().next().removeClass('d-none').addClass('d-block').find('.commentInputField').empty();
     }

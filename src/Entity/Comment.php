@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Comment
 {
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -35,7 +36,7 @@ class Comment
     private $text;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="datetime")
      */
     private $time;
 
@@ -46,6 +47,7 @@ class Comment
 
     public function __construct()
     {
+        $this->time = new \DateTime('now');
     }
 
     public function getId(): ?int
@@ -73,18 +75,6 @@ class Comment
     public function setPost(?Post $post): self
     {
         $this->post = $post;
-
-        return $this;
-    }
-
-    public function getTime(): ?string
-    {
-        return $this->time;
-    }
-
-    public function setTime(string $time): self
-    {
-        $this->time = $time;
 
         return $this;
     }
@@ -119,5 +109,13 @@ class Comment
     public function setText($text): void
     {
         $this->text = $text;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTime()
+    {
+        return $this->time;
     }
 }

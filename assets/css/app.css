@@ -1,6 +1,8 @@
+html {
+    min-height: 100vh}
 body {
     background-image: url("http://starkovtattoo.spb.ru/images/100/DSC100163876.jpg");
-    min-height: 800px;
+    min-height: 100vh
 }
 footer {
     background-color: #555;
@@ -136,7 +138,12 @@ footer {
 
 .myProfileView {
     background-color: aliceblue;
-    min-height: 950px;
+    height: 100%;
+}
+
+.side-menu {
+    border-right: 2px solid lightgray;
+    min-height: 100vh
 }
 
 .viewImageButton {
@@ -406,11 +413,10 @@ a.control_next {
 }
 
 .commentDiv {
-    padding: 5px;
-    width: 100%;
-    min-height: 40px;
-    height: auto;
-    background-color: white;
+    width: 90%;
+    position: relative;
+    left: 5%;
+    right: 5%;
 }
 
 .commentForm {
@@ -449,3 +455,4 @@ a.control_next {
     position: relative;
     left: 10%;
 }
+

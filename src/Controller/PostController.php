@@ -8,6 +8,7 @@ use App\Entity\Post;
 use App\Entity\User;
 use App\Repository\CommentRepository;
 use App\Repository\PostRepository;
+use App\Service\CommentService;
 use App\Service\UploadService;
 use DateTime;
 use Doctrine\ORM\EntityManager;
@@ -62,7 +63,7 @@ class PostController extends AbstractController
     public function newComment(Request $request, $postId, $parentId = null): RedirectResponse
     {
         $comment = new Comment();
-        $parentId = $request->get('commentId');
+        $parentId = $request->get('parentId');
 
         /** @var Post $entityManager */
         $entityManager = $this->getDoctrine()->getManager();
@@ -71,9 +72,7 @@ class PostController extends AbstractController
 
         /** @var User $this */
         $comment->setUser($this->getUser());
-        $dateAndTime = new DateTime();
-        $comment->setTime($dateAndTime->format('Y-m-d H:i:s'));
-        !empty($parentId) ? $comment->setParent($parentId) : $comment->setParent('');
+        !empty($parentId) ? $comment->setParent($parentId) : $comment->setParent(0);
         $this->getDoctrine()->getManager()->persist($comment);
         $this->getDoctrine()->getManager()->flush();
 
@@ -94,19 +93,21 @@ class PostController extends AbstractController
 
     /**
      * @Route("/comments/{postId}", name="get_comments", methods={"POST"})
+     * @param CommentService $commentService
      * @param Request $request
      * @param $postId
      * @return Response
      */
-    public function getComments(Request $request, $postId)
+    public function getComments(CommentService $commentService, Request $request, $postId)
     {
         $post = $this->getDoctrine()->getRepository(Post::class)->findOneBy(['id' => $postId]);
         $commentRepo = $this->getDoctrine()->getRepository(Comment::class);
         $comments = $commentRepo->returnCommentsOffset($postId, $request->get('offset'));
+        $commentsArray = $commentService->children($commentService->objectsToArray($comments));
 
         return $this->render('embed/show_comments.html.twig', [
             'post' => $post,
-            'comments' => $comments
+            'comments' => $commentsArray
         ]);
     }
 

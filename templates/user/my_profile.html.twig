@@ -6,7 +6,7 @@
     <div class="container-fluid myProfileView">
         <input type="hidden" class="userId" value="{{ user.id }}">
         <div class="row">
-            <div class="col-3" style="border-right: 2px solid lightgray">
+            <div class="col-3 side-menu">
                 <div class="profileData mt-3">
                     {% if user.profilePicture is not empty %}
                         <div style="background-image: url({{ user.profilePicture }});border: 0.5px solid lightgrey;" class="profileImageHolder" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ></div>
@@ -121,7 +121,9 @@
                             {% endif %}
                             {% if post.comments|length > 0 %}
                                 {% if post.comments|length < 3 %}
-                                    {{ render(controller('App\\Controller\\PostController::getComments', {postId: post.id})) }}
+                                    <div class="commentDiv" ">
+                                        {{ render(controller('App\\Controller\\PostController::getComments', {postId: post.id})) }}
+                                    </div>
                                 {% else %}
                                     <span data-flag="hide" class="show-comments" data-id="{{ post.id }}" data-count="{{ post.comments|length }}">{{ post.comments|length }} comments</span>
                                     <div class="container-fluid comments-container">

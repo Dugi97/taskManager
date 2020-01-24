@@ -1,23 +1,31 @@
-{% for comment in comments %}
-    {% if comment.parent is null %}
-        <div class="commentDiv">
-            <div class="mb-1">
-                <img src="{{ comment.user.profilePicture }}" alt="" class="mediumProfilePicture">
-                <a href="{{ path('show_my_account', {accountAlias: comment.user.accountAlias}) }}">  {{ comment.user.fullname }}</a>
-            </div>
-            <div style="border-bottom: 1px solid rgba(184,184,184, 0.5)">{{ comment.text }}</div>
-            <span class="replay font-weight-bold" data-id="{{ comment.id }}" data-user="{{ comment.user.fullname }}">Replay</span>
-            {% if comment.comments|length > 0 %}
-                <span data-flag="hide" class="show-replays" data-id="{{ comment.id }}" data-count="{{ comment.comments|length }}">Show replays</span>
-                <div class="replays-container"></div>
-                <a href="" class="show-more-replays d-none" data-offset="0" data-id="{{ comment.id }}">Show more replays</a>
-            {% endif %}
-        </div>
-        <div class="replayArea d-none">
-            <form class="commentForm" action="{{ path('leave_comment', {postId: post.id}) }}" method="post">
-                <input type="text" name="commentId" class="d-none commentId">
-                <textarea name="commentInputField" rows='1' class="commentInputField form-group" placeholder="Leave a comment..."></textarea>
-            </form>
-        </div>
-    {% endif %}
-{% endfor %}
+{% set activeSubtree = comment.getComments(post.id) %}
+{% import _self as macro %}
+
+{{ macro.multilevel(activeSubtree) }}
+{% macro multilevel(array) %}
+    {% import _self as macro %}
+    <ul class="list-unstyled">
+        {% for item in array %}
+            <li class="{% if item.children is iterable %} m-3 {% endif %}">
+                <img src="{{ item.user.profilePicture }}" class="smallProfilePicture mr-2" alt="">
+                <span class="mr-2"><b><a href="">{{ item.user.fullname }}</a></b></span>
+                <span>{{ item.text }}</span><br>
+                <span class="replay" data-status="replay"><a href="">replay</a></span>
+                {% if item.children is iterable %}
+                    {% if item.children|length > 0 %}
+                        <span class="show-replays float-right"><a href="">{{ item.children|length }} replays</a></span>
+                    {% endif %}
+                    <div class="replays-wrapper"></div>
+                    {{ macro.multilevel(item.children) }}
+                {% else %}
+                    {{ item.children.text }}
+                {% endif %}
+                <div class="replayDiv d-none">
+                    <form class="commentForm" action="{{ path('leave_comment', {postId: item.post.id, parentId: item.id}) }}" method="post">
+                        <textarea name="commentInputField" class="commentInputField" rows='1' placeholder="Leave a comment..."></textarea>
+                    </form>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% endmacro %}

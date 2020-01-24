@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Post;
 use App\Entity\User;
+use App\Service\CommentService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
