@@ -5,26 +5,33 @@
 {% macro multilevel(array) %}
     {% import _self as macro %}
     <ul class="list-unstyled">
-        {% for item in array %}
-            <li class="{% if item.children is iterable %} m-3 {% endif %}">
-                <img src="{{ item.user.profilePicture }}" class="smallProfilePicture mr-2" alt="">
-                <span class="mr-2"><b><a href="">{{ item.user.fullname }}</a></b></span>
-                <span>{{ item.text }}</span><br>
-                <span class="replay" data-status="replay"><a href="">replay</a></span>
-                {% if item.children is iterable %}
-                    {% if item.children|length > 0 %}
-                        <span class="show-replays float-right"><a href="">{{ item.children|length }} replays</a></span>
-                    {% endif %}
-                    <div class="replays-wrapper"></div>
-                    {{ macro.multilevel(item.children) }}
-                {% else %}
-                    {{ item.children.text }}
-                {% endif %}
-                <div class="replayDiv d-none">
-                    <form class="commentForm" action="{{ path('leave_comment', {postId: item.post.id, parentId: item.id}) }}" method="post">
+        {% for post in array %}
+            <li class="{% if post.children is iterable %} m-3 {% endif %}">
+                <img src="{{ post.user.profilePicture }}" class="smallProfilePicture mr-2" alt="">
+                <span class="mr-2"><b><a href="">{{ post.user.fullname }}</a></b></span>
+                <span>{{ post.text }}</span><br>
+                <span class="replay" data-user="{{ post.user.fullname }}" data-id="{{ post.id }}" data-status="replay"><a href="">replay</a></span>
+                <div class="replayDiv replayDiv{{ post.id }} d-none">
+                    <form class="commentForm" action="{{ path('leave_comment', {postId: post.post.id, parentId: post.id}) }}" method="post">
                         <textarea name="commentInputField" class="commentInputField" rows='1' placeholder="Leave a comment..."></textarea>
                     </form>
                 </div>
+                {% if post.children is iterable %}
+                    {% if post.children|length > 0 %}
+                        {% if post.children|length == 1 %}
+                            {% set prefix = 'replay' %}
+                        {% else %}
+                            {% set prefix = 'replays' %}
+                        {% endif %}
+                        <span class="show-replays float-right">
+                            <a href="">{{ post.children|length }} {{ prefix }}</a>
+                        </span>
+                    {% endif %}
+                    <div class="replays-wrapper"></div>
+                    {{ macro.multilevel(post.children) }}
+                {% else %}
+                    {{ post.children.text }}
+                {% endif %}
             </li>
         {% endfor %}
     </ul>

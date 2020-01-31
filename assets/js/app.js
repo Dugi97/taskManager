@@ -83,12 +83,15 @@ $('.viewImage').click(function () {
 
 $(document).on('click', '.replay', function(e) {
     e.preventDefault();
-    $('.commentId').val($(this).data('id'));
+    let postId = $(this).data('id'),
+        user = $(this).data('user');
+
     if ($(this).data('status') === 'replay') {
-        $(this).find('.replayDiv').removeClass('d-none').addClass('d-block');
-        // $(this).parent().parent().next().removeClass('d-none').addClass('d-block').find('.commentInputField').empty().text('@'+$(this).data('user') + ' ');
+        $('.replayDiv').addClass('d-none').removeClass('d-block');
+        $('.replayDiv' + postId).removeClass('d-none').addClass('d-block').find('.commentInputField').empty().text('@'+user + ' ');
     } else {
-        $(this).parent().next().removeClass('d-none').addClass('d-block').find('.commentInputField').empty();
+        $('.replayDiv').addClass('d-none').removeClass('d-block');
+        $('.replayDiv' + postId).removeClass('d-none').addClass('d-block').find('.commentInputField').empty();
     }
 });
 $(document).on('click', '.show-comments', function (e) {

@@ -121,7 +121,7 @@
                             {% endif %}
                             {% if post.comments|length > 0 %}
                                 {% if post.comments|length < 3 %}
-                                    <div class="commentDiv" ">
+                                    <div class="commentDiv">
                                         {{ render(controller('App\\Controller\\PostController::getComments', {postId: post.id})) }}
                                     </div>
                                 {% else %}
